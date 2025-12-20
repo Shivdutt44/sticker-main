@@ -1,0 +1,2716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Sticker Customizer - Shopify</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --primary-light: #dbeafe;
+            --secondary-color: #f8fafc;
+            --accent-color: #3b82f6;
+            --gold-accent: #f59e0b;
+            --border-color: #e2e8f0;
+            --text-color: #1e293b;
+            --light-text: #64748b;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .app-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .app-logo i {
+            font-size: 1.5rem;
+        }
+        
+        .app-logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .app-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .app-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .app-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: white;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 1rem;
+            border-radius: 0.5rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 1rem;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+        
+        .progress-step.active:not(:last-child)::after {
+            background: var(--primary-color);
+        }
+        
+        .progress-step-circle {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            z-index: 1;
+            transition: var(--transition);
+        }
+        
+        .progress-step.active .progress-step-circle {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+        
+        .progress-step.completed .progress-step-circle {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+        
+        .progress-step-label {
+            font-size: 0.75rem;
+            text-align: center;
+            color: var(--light-text);
+            font-weight: 500;
+        }
+        
+        .progress-step.active .progress-step-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .progress-step.completed .progress-step-label {
+            color: var(--success-color);
+        }
+        
+        /* Main Container */
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 1rem;
+            min-height: calc(100vh - 180px);
+        }
+        
+        /* Controls Panel */
+        .controls-panel {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: sticky;
+            top: calc(100px + 4rem);
+            height: calc(100vh - 180px);
+        }
+        
+        .controls-tabs {
+            display: flex;
+            background: var(--secondary-color);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        
+        .controls-tab {
+            flex: 1;
+            padding: 1rem 0.5rem;
+            text-align: center;
+            font-weight: 500;
+            color: var(--light-text);
+            cursor: pointer;
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
+            font-size: 0.875rem;
+        }
+        
+        .controls-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+            background: white;
+        }
+        
+        .controls-tab i {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .controls-content {
+            padding: 1rem;
+            overflow-y: auto;
+            flex: 1;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        
+        .controls-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .controls-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .controls-content::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 3px;
+        }
+        
+        .controls-content::-webkit-scrollbar-thumb:hover {
+            background-color: var(--light-text);
+        }
+        
+        .control-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .control-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .control-section-title i {
+            color: var(--primary-color);
+            font-size: 0.875rem;
+        }
+        
+        .help-tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 0.25rem;
+            color: var(--light-text);
+            cursor: help;
+        }
+        
+        .help-tooltip i {
+            font-size: 0.75rem;
+        }
+        
+        .help-tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--text-color);
+            color: white;
+            text-align: center;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .help-tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        /* Logo Upload */
+        .logo-upload-container {
+            border: 2px dashed var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--secondary-color);
+            position: relative;
+        }
+        
+        .logo-upload-container:hover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .logo-upload-container.dragover {
+            border-color: var(--primary-color);
+            background: var(--primary-light);
+        }
+        
+        .logo-upload-icon {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-upload-text {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .logo-upload-subtext {
+            font-size: 0.75rem;
+            color: var(--light-text);
+        }
+        
+        .logo-preview {
+            margin-top: 0.75rem;
+            display: none;
+        }
+        
+        .logo-preview-img {
+            max-width: 100%;
+            max-height: 100px;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .logo-preview-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+        
+        .logo-preview-name {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            font-weight: 500;
+            word-break: break-all;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            padding-right: 0.5rem;
+        }
+        
+        .logo-remove-btn {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .logo-remove-btn:hover {
+            background: #dc2626;
+        }
+        
+        /* Outline Controls */
+        .outline-toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: var(--secondary-color);
+            border-radius: 0.5rem;
+        }
+        
+        .outline-toggle-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: var(--transition);
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+        
+        .outline-controls {
+            padding: 0.75rem;
+            background: var(--secondary-color);
+            border-radius: 0.5rem;
+        }
+        
+        .outline-controls.hidden {
+            display: none;
+        }
+        
+        .slider-control {
+            margin-bottom: 0.75rem;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .slider-value {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .color-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .color-preview {
+            width: 32px;
+            height: 32px;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        
+        .color-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+        
+        .color-palette {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .color-option {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        
+        .color-option.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+        
+        .checkbox-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        
+        .checkbox-control input {
+            margin: 0;
+        }
+        
+        .checkbox-label {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        /* Grid Controls */
+        .grid-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+        }
+        
+        .grid-control {
+            padding: 0.75rem;
+            background: var(--secondary-color);
+            border-radius: 0.5rem;
+        }
+        
+        .grid-control-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .grid-control-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .grid-control-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.75rem;
+        }
+        
+        .grid-control-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .grid-control-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+        
+        .grid-control-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        /* Board and Sticker Size Controls */
+        .size-controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        
+        .size-control {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--secondary-color);
+            border-radius: 0.5rem;
+        }
+        
+        .size-control-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .size-control-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            background: white;
+        }
+        
+        .size-control-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+        
+        .number-input-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .number-input-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 0.25rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.75rem;
+        }
+        
+        .number-input-btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .number-input-btn:disabled {
+            background: #f1f5f9;
+            color: #cbd5e1;
+            cursor: not-allowed;
+        }
+        
+        .number-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0;
+            font-size: 0.875rem;
+            text-align: center;
+            border-left: none;
+            border-right: none;
+        }
+        
+        .number-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .number-input-container .number-input-btn:first-child {
+            border-radius: 0.25rem 0 0 0.25rem;
+        }
+        
+        .number-input-container .number-input-btn:last-child {
+            border-radius: 0 0.25rem 0.25rem 0;
+        }
+        
+        /* Smart Suggestions */
+        .smart-suggestions {
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            background: var(--primary-light);
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .smart-suggestions-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .smart-suggestion-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .smart-suggestion-item:hover {
+            background: var(--secondary-color);
+        }
+        
+        .smart-suggestion-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .smart-suggestion-text {
+            font-size: 0.875rem;
+        }
+        
+        .smart-suggestion-apply {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .smart-suggestion-apply:hover {
+            background: var(--primary-dark);
+        }
+        
+        /* Preview Panel */
+        .preview-panel {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .preview-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .preview-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+        
+        .preview-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .preview-action-btn {
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-color);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .preview-action-btn:hover {
+            background: var(--secondary-color);
+        }
+        
+        .preview-action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .preview-action-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .preview-content {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        
+        .preview-board-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            position: relative;
+            overflow: auto;
+            min-height: 250px;
+        }
+        
+        .preview-board {
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .preview-board-label {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.25rem 0.5rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
+        }
+        
+        .canvas-container {
+            background-image: 
+                linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(-45deg, #ccc 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #ccc 75%), 
+                linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        #stickerCanvas {
+            object-fit: contain;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .preview-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .preview-spec {
+            background: var(--secondary-color);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        
+        .preview-spec-title {
+            font-size: 0.75rem;
+            color: var(--light-text);
+            margin-bottom: 0.25rem;
+        }
+        
+        .preview-spec-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        /* Confirmation Section */
+        .confirmation-section {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--secondary-color);
+        }
+        
+        .confirmation-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .confirmation-text {
+            color: var(--light-text);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+        }
+        
+        .confirmation-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .confirmation-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .confirmation-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+        }
+        
+        .confirmation-btn.primary:hover {
+            background: var(--primary-dark);
+        }
+        
+        .confirmation-btn.secondary {
+            background: white;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .confirmation-btn.secondary:hover {
+            background: var(--secondary-color);
+        }
+        
+        .confirmation-message {
+            display: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-top: 0.75rem;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .confirmation-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .confirmation-message.help {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        /* Mobile Menu Overlay */
+        .controls-panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 150;
+            display: none;
+        }
+        
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+        }
+        
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+        
+        .notification-toast-icon {
+            font-size: 1.25rem;
+        }
+        
+        .notification-toast.success .notification-toast-icon {
+            color: var(--success-color);
+        }
+        
+        .notification-toast.error .notification-toast-icon {
+            color: var(--danger-color);
+        }
+        
+        .notification-toast.info .notification-toast-icon {
+            color: var(--primary-color);
+        }
+        
+        .notification-toast-content {
+            flex: 1;
+        }
+        
+        .notification-toast-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .notification-toast-message {
+            font-size: 0.875rem;
+            color: var(--light-text);
+        }
+        
+        .notification-toast-close {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 300px 1fr;
+            }
+            
+            .controls-panel {
+                height: calc(100vh - 180px);
+                top: calc(100px + 4rem);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-header-content {
+                padding: 0 0.5rem;
+            }
+            
+            .app-logo h1 {
+                font-size: 1.25rem;
+            }
+            
+            .app-actions {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+            
+            .app-container {
+                grid-template-columns: 1fr;
+                padding: 0.5rem;
+                gap: 0.5rem;
+            }
+            
+            .controls-panel {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 85%;
+                max-width: 350px;
+                height: 100vh;
+                z-index: 200;
+                transition: left 0.3s ease;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            
+            .controls-panel.open {
+                left: 0;
+            }
+            
+            .controls-panel-overlay.show {
+                display: block;
+            }
+            
+            .preview-specs {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .confirmation-actions {
+                flex-direction: column;
+            }
+            
+            .preview-board-container {
+                min-height: 200px;
+            }
+            
+            .size-controls {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .app-header {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .app-container {
+                padding: 0.25rem;
+            }
+            
+            .preview-header {
+                padding: 0.75rem;
+            }
+            
+            .preview-title {
+                font-size: 1rem;
+            }
+            
+            .preview-content {
+                padding: 0.75rem;
+            }
+            
+            .preview-board-container {
+                padding: 0.75rem;
+                min-height: 180px;
+            }
+            
+            .confirmation-section {
+                padding: 0.75rem;
+            }
+            
+            .preview-specs {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .controls-tab {
+                padding: 0.75rem 0.25rem;
+                font-size: 0.75rem;
+            }
+            
+            .controls-tab i {
+                font-size: 0.875rem;
+            }
+            
+            .control-section-title {
+                font-size: 0.8rem;
+            }
+            
+            .logo-upload-container {
+                padding: 0.75rem;
+            }
+            
+            .logo-upload-icon {
+                font-size: 1.25rem;
+            }
+            
+            .logo-upload-text {
+                font-size: 0.75rem;
+            }
+            
+            .logo-upload-subtext {
+                font-size: 0.625rem;
+            }
+            
+            .progress-indicator {
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .progress-step-circle {
+                width: 1.5rem;
+                height: 1.5rem;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (min-width: 1025px) and (max-height: 900px) {
+            .controls-panel {
+                height: calc(100vh - 150px);
+                top: calc(80px + 4rem);
+            }
+            
+            .controls-content {
+                max-height: calc(100vh - 250px);
+            }
+        }
+        
+        @media (min-width: 1025px) and (min-height: 901px) {
+            .controls-panel {
+                height: calc(100vh - 180px);
+                top: calc(100px + 4rem);
+            }
+            
+            .controls-content {
+                max-height: calc(100vh - 280px);
+            }
+        }
+        
+        @media (min-width: 1025px) and (min-height: 1200px) {
+            .controls-panel {
+                height: calc(100vh - 200px);
+                top: calc(100px + 4rem);
+            }
+            
+            .controls-content {
+                max-height: calc(100vh - 300px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="app-header-content">
+            <div class="app-logo">
+                <i class="fas fa-tags"></i>
+                <h1>Sticker Customizer</h1>
+            </div>
+            <div class="app-actions">
+                <button class="app-action-btn" id="saveDesignBtn">
+                    <i class="fas fa-save"></i>
+                    <span>Save Design</span>
+                </button>
+                <button class="app-action-btn" id="shareDesignBtn">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+            </div>
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Progress Indicator -->
+    <div class="progress-indicator">
+        <div class="progress-step active" id="step1">
+            <div class="progress-step-circle">
+                <i class="fas fa-image"></i>
+            </div>
+            <div class="progress-step-label">Logo</div>
+        </div>
+        <div class="progress-step" id="step2">
+            <div class="progress-step-circle">
+                <i class="fas fa-border-style"></i>
+            </div>
+            <div class="progress-step-label">Outline</div>
+        </div>
+        <div class="progress-step" id="step3">
+            <div class="progress-step-circle">
+                <i class="fas fa-th"></i>
+            </div>
+            <div class="progress-step-label">Layout</div>
+        </div>
+        <div class="progress-step" id="step4">
+            <div class="progress-step-circle">
+                <i class="fas fa-check"></i>
+            </div>
+            <div class="progress-step-label">Confirm</div>
+        </div>
+    </div>
+    
+    <!-- Main App Container -->
+    <div class="app-container">
+        <!-- Controls Panel -->
+        <aside class="controls-panel" id="controlsPanel">
+            <div class="controls-tabs">
+                <div class="controls-tab active" data-tab="design">
+                    <i class="fas fa-palette"></i>
+                    <span>Design</span>
+                </div>
+                <div class="controls-tab" data-tab="layout">
+                    <i class="fas fa-th"></i>
+                    <span>Layout</span>
+                </div>
+            </div>
+            
+            <div class="controls-content">
+                <!-- Design Tab -->
+                <div class="tab-content" id="designTab">
+                    <!-- Logo Upload Section -->
+                    <div class="control-section" id="logoSection">
+                        <div class="control-section-title">
+                            <i class="fas fa-image"></i>
+                            Logo
+                            <div class="help-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Upload your logo in PNG or JPG format. Recommended size: 500x500px or larger for best quality.</span>
+                            </div>
+                        </div>
+                        <div class="logo-upload-container" id="logoUploadContainer">
+                            <div class="logo-upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="logo-upload-text">Upload Logo</div>
+                            <div class="logo-upload-subtext">Click to upload or drag and drop</div>
+                            <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
+                        </div>
+                        <div class="logo-preview" id="logoPreview">
+                            <img class="logo-preview-img" id="logoPreviewImg" src="" alt="Logo Preview">
+                            <div class="logo-preview-actions">
+                                <div class="logo-preview-name" id="logoPreviewName"></div>
+                                <button class="logo-remove-btn" id="logoRemoveBtn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Outline Controls -->
+                    <div class="control-section" id="outlineSection">
+                        <div class="control-section-title">
+                            <i class="fas fa-border-style"></i>
+                            Outline
+                            <div class="help-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Add a smooth outline around your logo using advanced distance transform algorithm.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="outline-toggle-container">
+                            <div class="outline-toggle-label">Enable Outline</div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="outlineToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="outline-controls" id="outlineControls">
+                            <div class="slider-control">
+                                <div class="slider-label">
+                                    <span>Outline Width</span>
+                                    <span class="slider-value" id="outlineWidthValue">10px</span>
+                                </div>
+                                <input type="range" min="0" max="30" value="10" class="slider" id="outlineWidth">
+                            </div>
+                            
+                            <div class="color-control">
+                                <div class="color-preview" id="outlineColorPreview"></div>
+                                <input type="text" class="color-input" id="outlineColorHex" value="#000000" maxlength="7">
+                            </div>
+                            
+                            <div class="color-palette" id="outlineColorPalette">
+                                <!-- Color options will be generated by JavaScript -->
+                            </div>
+                            
+                            <div class="checkbox-control">
+                                <input type="checkbox" id="smoothingToggle" checked>
+                                <label class="checkbox-label" for="smoothingToggle">Enable Smooth Edges</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Layout Tab -->
+                <div class="tab-content hidden" id="layoutTab">
+                    <!-- Grid Controls -->
+                    <div class="control-section" id="gridSection">
+                        <div class="control-section-title">
+                            <i class="fas fa-th"></i>
+                            Grid Layout
+                            <div class="help-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Adjust number of stickers horizontally and vertically on your board.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid-controls">
+                            <div class="grid-control">
+                                <div class="grid-control-label">
+                                    <i class="fas fa-arrows-alt-h"></i>
+                                    Horizontal
+                                </div>
+                                <div class="grid-control-inputs">
+                                    <button class="grid-control-btn" id="horizontalDecrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <div class="grid-control-value" id="horizontalValue">2</div>
+                                    <button class="grid-control-btn" id="horizontalIncrease">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid-control">
+                                <div class="grid-control-label">
+                                    <i class="fas fa-arrows-alt-v"></i>
+                                    Vertical
+                                </div>
+                                <div class="grid-control-inputs">
+                                    <button class="grid-control-btn" id="verticalDecrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <div class="grid-control-value" id="verticalValue">2</div>
+                                    <button class="grid-control-btn" id="verticalIncrease">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Size Controls -->
+                    <div class="control-section" id="sizeSection">
+                        <div class="control-section-title">
+                            <i class="fas fa-ruler-combined"></i>
+                            Size Settings
+                            <div class="help-tooltip">
+                                <i class="fas fa-question-circle"></i>
+                                <span class="tooltip-text">Select your board size and sticker diameter. We'll automatically optimize the layout.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="size-controls">
+                            <div class="size-control">
+                                <div class="size-control-label">
+                                    <i class="fas fa-expand-arrows-alt"></i>
+                                    Board Size (cm)
+                                </div>
+                                <select class="size-control-input" id="boardSizeSelect">
+                                    <option value="10x15">10 × 15</option>
+                                    <option value="15x20">15 × 20</option>
+                                    <option value="20x30">20 × 30</option>
+                                    <option value="30x40">30 × 40</option>
+                                    <option value="40x50">40 × 50</option>
+                                    <option value="50x70">50 × 70</option>
+                                </select>
+                            </div>
+                            
+                            <div class="size-control">
+                                <div class="size-control-label">
+                                    <i class="fas fa-circle"></i>
+                                    Sticker Diameter (cm)
+                                </div>
+                                <div class="number-input-container">
+                                    <button class="number-input-btn" id="diameterDecrease">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="number-input" id="diameterInput" value="5" min="1" max="20" step="0.5">
+                                    <button class="number-input-btn" id="diameterIncrease">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Smart Suggestions -->
+                        <div class="smart-suggestions" id="smartSuggestions">
+                            <div class="smart-suggestions-title">
+                                <i class="fas fa-lightbulb"></i>
+                                Smart Suggestions
+                            </div>
+                            <div class="smart-suggestion-item" id="optimizeLayoutBtn">
+                                <div class="smart-suggestion-text">Optimize layout for current settings</div>
+                                <button class="smart-suggestion-apply">Apply</button>
+                            </div>
+                            <div class="smart-suggestion-item" id="maximizeStickersBtn">
+                                <div class="smart-suggestion-text">Maximize number of stickers</div>
+                                <button class="smart-suggestion-apply">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Preview Panel -->
+        <main class="preview-panel">
+            <div class="preview-header">
+                <h2 class="preview-title">Preview</h2>
+                <div class="preview-actions">
+                    <button class="preview-action-btn" id="resetBtn">
+                        <i class="fas fa-undo"></i>
+                        <span>Reset</span>
+                    </button>
+                    <button class="preview-action-btn primary" id="downloadBtn">
+                        <i class="fas fa-download"></i>
+                        <span>Download</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="preview-content">
+                <div class="preview-board-container">
+                    <div class="preview-board" id="previewBoard">
+                        <div class="preview-board-label" id="boardLabel">Board 10 × 15 cm</div>
+                        <div class="canvas-container" id="canvasContainer">
+                            <canvas id="stickerCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-specs">
+                    <div class="preview-spec">
+                        <div class="preview-spec-title">Board Size</div>
+                        <div class="preview-spec-value" id="boardSizeValue">10 × 15 cm</div>
+                    </div>
+                    <div class="preview-spec">
+                        <div class="preview-spec-title">Total Stickers</div>
+                        <div class="preview-spec-value" id="totalStickersValue">4</div>
+                    </div>
+                    <div class="preview-spec">
+                        <div class="preview-spec-title">Sticker Diameter</div>
+                        <div class="preview-spec-value" id="stickerDiameterValue">5 cm</div>
+                    </div>
+                    <div class="preview-spec">
+                        <div class="preview-spec-title">Space Used</div>
+                        <div class="preview-spec-value" id="spaceUsedValue">75%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="confirmation-section">
+                <h3 class="confirmation-title">Do these labels suit you?</h3>
+                <p class="confirmation-text">Check preview and confirm if design meets your expectations.</p>
+                
+                <div class="confirmation-actions">
+                    <button class="confirmation-btn primary" id="confirmYesBtn">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Yes, it's perfect!</span>
+                    </button>
+                    <button class="confirmation-btn secondary" id="confirmHelpBtn">
+                        <i class="fas fa-question-circle"></i>
+                        <span>I need help</span>
+                    </button>
+                </div>
+                
+                <div class="confirmation-message success" id="successMessage">
+                    <i class="fas fa-check"></i> Thank you! Your design has been confirmed and added to your cart.
+                </div>
+                
+                <div class="confirmation-message help" id="helpMessage">
+                    <i class="fas fa-headset"></i> Our support team will contact you shortly to assist with your design.
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="controls-panel-overlay" id="controlsPanelOverlay"></div>
+    
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-toast-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <div class="notification-toast-content">
+            <div class="notification-toast-title" id="notificationTitle">Success</div>
+            <div class="notification-toast-message" id="notificationMessage">Action completed successfully</div>
+        </div>
+        <button class="notification-toast-close" id="notificationClose">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const controlsPanel = document.getElementById('controlsPanel');
+            const controlsPanelOverlay = document.getElementById('controlsPanelOverlay');
+            
+            // Tab Elements
+            const controlsTabs = document.querySelectorAll('.controls-tab');
+            const designTab = document.getElementById('designTab');
+            const layoutTab = document.getElementById('layoutTab');
+            
+            // Progress Steps
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const step4 = document.getElementById('step4');
+            
+            // Logo Upload Elements
+            const logoSection = document.getElementById('logoSection');
+            const logoUploadContainer = document.getElementById('logoUploadContainer');
+            const logoFileInput = document.getElementById('logoFileInput');
+            const logoPreview = document.getElementById('logoPreview');
+            const logoPreviewImg = document.getElementById('logoPreviewImg');
+            const logoPreviewName = document.getElementById('logoPreviewName');
+            const logoRemoveBtn = document.getElementById('logoRemoveBtn');
+            
+            // Outline Elements
+            const outlineSection = document.getElementById('outlineSection');
+            const outlineToggle = document.getElementById('outlineToggle');
+            const outlineControls = document.getElementById('outlineControls');
+            const outlineWidth = document.getElementById('outlineWidth');
+            const outlineWidthValue = document.getElementById('outlineWidthValue');
+            const outlineColorPreview = document.getElementById('outlineColorPreview');
+            const outlineColorHex = document.getElementById('outlineColorHex');
+            const outlineColorPalette = document.getElementById('outlineColorPalette');
+            const smoothingToggle = document.getElementById('smoothingToggle');
+            
+            // Canvas and Container Elements
+            const canvas = document.getElementById('stickerCanvas');
+            const ctx = canvas.getContext('2d');
+            const previewBoard = document.getElementById('previewBoard');
+            const canvasContainer = document.getElementById('canvasContainer');
+            
+            // Grid Elements
+            const gridSection = document.getElementById('gridSection');
+            const horizontalDecrease = document.getElementById('horizontalDecrease');
+            const horizontalIncrease = document.getElementById('horizontalIncrease');
+            const horizontalValue = document.getElementById('horizontalValue');
+            const verticalDecrease = document.getElementById('verticalDecrease');
+            const verticalIncrease = document.getElementById('verticalIncrease');
+            const verticalValue = document.getElementById('verticalValue');
+            
+            // Size Elements
+            const sizeSection = document.getElementById('sizeSection');
+            const boardSizeSelect = document.getElementById('boardSizeSelect');
+            const diameterDecrease = document.getElementById('diameterDecrease');
+            const diameterIncrease = document.getElementById('diameterIncrease');
+            const diameterInput = document.getElementById('diameterInput');
+            
+            // Smart Suggestions
+            const smartSuggestions = document.getElementById('smartSuggestions');
+            const optimizeLayoutBtn = document.getElementById('optimizeLayoutBtn');
+            const maximizeStickersBtn = document.getElementById('maximizeStickersBtn');
+            
+            // Preview Elements
+            const boardLabel = document.getElementById('boardLabel');
+            const boardSizeValue = document.getElementById('boardSizeValue');
+            const totalStickersValue = document.getElementById('totalStickersValue');
+            const stickerDiameterValue = document.getElementById('stickerDiameterValue');
+            const spaceUsedValue = document.getElementById('spaceUsedValue');
+            
+            // Action Buttons
+            const resetBtn = document.getElementById('resetBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const saveDesignBtn = document.getElementById('saveDesignBtn');
+            const shareDesignBtn = document.getElementById('shareDesignBtn');
+            const confirmYesBtn = document.getElementById('confirmYesBtn');
+            const confirmHelpBtn = document.getElementById('confirmHelpBtn');
+            const successMessage = document.getElementById('successMessage');
+            const helpMessage = document.getElementById('helpMessage');
+            
+            // Notification Toast
+            const notificationToast = document.getElementById('notificationToast');
+            const notificationTitle = document.getElementById('notificationTitle');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const notificationClose = document.getElementById('notificationClose');
+            
+            // Default logo
+            const defaultLogo = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%232563eb'/%3E%3Ctext x='50' y='60' font-family='Inter, sans-serif' font-size='24' text-anchor='middle' fill='white'%3ELogo%3C/text%3E%3C/svg%3E";
+            
+            // Color palette options
+            const colorPalette = [
+                '#000000', '#2563eb', '#3b82f6', '#10b981', '#ef4444', 
+                '#f59e0b', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6', '#ffffff'
+            ];
+            
+            // Board size options mapping
+            const boardSizeOptions = {
+                '10x15': { width: 10, height: 15 },
+                '15x20': { width: 15, height: 20 },
+                '20x30': { width: 20, height: 30 },
+                '30x40': { width: 30, height: 40 },
+                '40x50': { width: 40, height: 50 },
+                '50x70': { width: 50, height: 70 }
+            };
+            
+            // App State
+            const appState = {
+                logoUrl: defaultLogo,
+                originalImage: null,
+                boardSize: { width: 10, height: 15 }, // in cm
+                stickerDiameter: 5, // in cm
+                outlineEnabled: true,
+                outline: {
+                    width: 10,
+                    color: '#000000',
+                    smoothing: true
+                },
+                grid: {
+                    horizontal: 2,
+                    vertical: 2
+                },
+                currentStep: 1,
+                hasLogo: false,
+                hasOutline: true,
+                hasLayout: false
+            };
+            
+            // Initialize the app
+            function initApp() {
+                // Initialize color palettes
+                initializeColorPalette(outlineColorPalette, outlineColorHex, outlineColorPreview, 'outline');
+                
+                // Set initial values
+                outlineWidth.value = appState.outline.width;
+                outlineWidthValue.textContent = `${appState.outline.width}px`;
+                outlineToggle.checked = appState.outlineEnabled;
+                smoothingToggle.checked = appState.outline.smoothing;
+                boardSizeSelect.value = '10x15';
+                diameterInput.value = appState.stickerDiameter;
+                
+                // Show default logo preview
+                logoPreviewImg.src = defaultLogo;
+                logoPreviewName.textContent = 'Default Logo';
+                logoPreview.style.display = 'block';
+                
+                // Load default logo
+                loadDefaultLogo();
+                
+                // Set grid display
+                updateGridDisplay();
+                
+                // Update size display
+                updateSizeDisplay();
+                
+                // Update space used
+                updateSpaceUsed();
+                
+                // Update progress
+                updateProgress();
+                
+                // Initial draw
+                draw();
+            }
+            
+            // Load default logo as image
+            function loadDefaultLogo() {
+                const img = new Image();
+                img.onload = function() {
+                    appState.originalImage = img;
+                    draw();
+                };
+                img.src = defaultLogo;
+            }
+            
+            // Show notification toast
+            function showNotification(title, message, type = 'success') {
+                notificationTitle.textContent = title;
+                notificationMessage.textContent = message;
+                
+                // Update icon and class based on type
+                const icon = notificationToast.querySelector('.notification-toast-icon i');
+                notificationToast.className = 'notification-toast show ' + type;
+                
+                if (type === 'success') {
+                    icon.className = 'fas fa-check-circle';
+                } else if (type === 'error') {
+                    icon.className = 'fas fa-exclamation-circle';
+                } else if (type === 'info') {
+                    icon.className = 'fas fa-info-circle';
+                }
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    notificationToast.classList.remove('show');
+                }, 5000);
+            }
+            
+            // Update progress indicator
+            function updateProgress() {
+                // Reset all steps
+                step1.classList.remove('active', 'completed');
+                step2.classList.remove('active', 'completed');
+                step3.classList.remove('active', 'completed');
+                step4.classList.remove('active', 'completed');
+                
+                // Update based on current state
+                if (appState.hasLogo) {
+                    step1.classList.add('completed');
+                    step2.classList.add('active');
+                    
+                    if (appState.hasOutline) {
+                        step2.classList.add('completed');
+                        step3.classList.add('active');
+                        
+                        if (appState.hasLayout) {
+                            step3.classList.add('completed');
+                            step4.classList.add('active');
+                        }
+                    }
+                } else {
+                    step1.classList.add('active');
+                }
+            }
+            
+            // Mobile Menu Toggle
+            mobileMenuToggle.addEventListener('click', function() {
+                controlsPanel.classList.toggle('open');
+                controlsPanelOverlay.classList.toggle('show');
+                // Prevent body scroll when menu is open
+                document.body.style.overflow = controlsPanel.classList.contains('open') ? 'hidden' : '';
+            });
+            
+            controlsPanelOverlay.addEventListener('click', function() {
+                controlsPanel.classList.remove('open');
+                controlsPanelOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            });
+            
+            // Tab Switching
+            controlsTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    controlsTabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Show/hide appropriate tab content
+                    const tabName = this.getAttribute('data-tab');
+                    if (tabName === 'design') {
+                        designTab.classList.remove('hidden');
+                        layoutTab.classList.add('hidden');
+                    } else {
+                        designTab.classList.add('hidden');
+                        layoutTab.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Logo Upload with drag and drop
+            logoUploadContainer.addEventListener('click', function() {
+                logoFileInput.click();
+            });
+            
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                logoUploadContainer.addEventListener(eventName, preventDefaults, false);
+                document.body.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            // Highlight drop area when item is dragged over it
+            ['dragenter', 'dragover'].forEach(eventName => {
+                logoUploadContainer.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                logoUploadContainer.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                logoUploadContainer.classList.add('dragover');
+            }
+            
+            function unhighlight() {
+                logoUploadContainer.classList.remove('dragover');
+            }
+            
+            // Handle dropped files
+            logoUploadContainer.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    handleFiles(files);
+                }
+            }
+            
+            logoFileInput.addEventListener('change', function(event) {
+                const files = event.target.files;
+                if (files.length > 0) {
+                    handleFiles(files);
+                }
+            });
+            
+            function handleFiles(files) {
+                const file = files[0];
+                if (file) {
+                    if (file.type.match('image.*')) {
+                        const reader = new FileReader();
+                        
+                        reader.onload = function(e) {
+                            // Update logo URL
+                            appState.logoUrl = e.target.result;
+                            appState.hasLogo = true;
+                            
+                            // Show preview
+                            logoPreviewImg.src = e.target.result;
+                            logoPreviewName.textContent = file.name;
+                            logoPreview.style.display = 'block';
+                            
+                            // Load image for canvas
+                            const img = new Image();
+                            img.onload = function() {
+                                appState.originalImage = img;
+                                draw();
+                                updateProgress();
+                            };
+                            img.src = e.target.result;
+                            
+                            // Show notification
+                            showNotification('Logo Uploaded', 'Your logo has been successfully uploaded', 'success');
+                        };
+                        
+                        reader.readAsDataURL(file);
+                    } else {
+                        showNotification('Upload Error', 'Please select an image file (JPEG, PNG, GIF, etc.)', 'error');
+                    }
+                }
+            }
+            
+            // Remove logo
+            logoRemoveBtn.addEventListener('click', function() {
+                // Reset to default logo
+                appState.logoUrl = defaultLogo;
+                appState.hasLogo = false;
+                
+                // Update preview
+                logoPreviewImg.src = defaultLogo;
+                logoPreviewName.textContent = 'Default Logo';
+                
+                // Load default logo
+                loadDefaultLogo();
+                
+                // Update progress
+                updateProgress();
+                
+                // Show notification
+                showNotification('Logo Removed', 'Your logo has been removed', 'info');
+            });
+            
+            // Outline Toggle
+            outlineToggle.addEventListener('change', function() {
+                appState.outlineEnabled = this.checked;
+                appState.hasOutline = this.checked;
+                outlineControls.classList.toggle('hidden', !this.checked);
+                
+                draw();
+                updateProgress();
+                
+                // Show notification
+                const status = this.checked ? 'enabled' : 'disabled';
+                showNotification('Outline Updated', `Outline has been ${status}`, 'info');
+            });
+            
+            // Outline Width
+            outlineWidth.addEventListener('input', function() {
+                appState.outline.width = parseInt(this.value);
+                outlineWidthValue.textContent = `${appState.outline.width}px`;
+                draw();
+            });
+            
+            // Outline Color
+            outlineColorHex.addEventListener('input', function() {
+                let color = this.value;
+                
+                // Add # if missing
+                if (!color.startsWith('#')) {
+                    color = '#' + color;
+                }
+                
+                // Validate hex color
+                const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
+                if (hexColorRegex.test(color)) {
+                    appState.outline.color = color;
+                    outlineColorPreview.style.backgroundColor = color;
+                    
+                    // Update active color in palette
+                    outlineColorPalette.querySelectorAll('.color-option').forEach(opt => {
+                        if (opt.getAttribute('data-color') === color) {
+                            opt.classList.add('active');
+                        } else {
+                            opt.classList.remove('active');
+                        }
+                    });
+                    
+                    draw();
+                }
+            });
+            
+            // Smoothing Toggle
+            smoothingToggle.addEventListener('change', function() {
+                appState.outline.smoothing = this.checked;
+                draw();
+            });
+            
+            // Grid Controls
+            horizontalDecrease.addEventListener('click', function() {
+                if (appState.grid.horizontal > 1) {
+                    appState.grid.horizontal--;
+                    updateGridDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new grid layout
+                }
+            });
+            
+            horizontalIncrease.addEventListener('click', function() {
+                if (appState.grid.horizontal < 6) {
+                    appState.grid.horizontal++;
+                    updateGridDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new grid layout
+                }
+            });
+            
+            verticalDecrease.addEventListener('click', function() {
+                if (appState.grid.vertical > 1) {
+                    appState.grid.vertical--;
+                    updateGridDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new grid layout
+                }
+            });
+            
+            verticalIncrease.addEventListener('click', function() {
+                if (appState.grid.vertical < 6) {
+                    appState.grid.vertical++;
+                    updateGridDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new grid layout
+                }
+            });
+            
+            // Size Controls
+            boardSizeSelect.addEventListener('change', function() {
+                const selectedSize = this.value;
+                appState.boardSize = boardSizeOptions[selectedSize];
+                updateSizeDisplay();
+                updateSpaceUsed();
+                draw(); // Redraw with new size
+            });
+            
+            diameterDecrease.addEventListener('click', function() {
+                const currentValue = parseFloat(diameterInput.value);
+                if (currentValue > 1) {
+                    const newValue = Math.max(1, currentValue - 0.5);
+                    diameterInput.value = newValue;
+                    appState.stickerDiameter = newValue;
+                    updateSizeDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new diameter
+                }
+            });
+            
+            diameterIncrease.addEventListener('click', function() {
+                const currentValue = parseFloat(diameterInput.value);
+                if (currentValue < 20) {
+                    const newValue = Math.min(20, currentValue + 0.5);
+                    diameterInput.value = newValue;
+                    appState.stickerDiameter = newValue;
+                    updateSizeDisplay();
+                    updateSpaceUsed();
+                    draw(); // Redraw with new diameter
+                }
+            });
+            
+            diameterInput.addEventListener('input', function() {
+                let value = parseFloat(this.value);
+                if (isNaN(value)) value = 1;
+                value = Math.max(1, Math.min(20, value));
+                this.value = value;
+                appState.stickerDiameter = value;
+                updateSizeDisplay();
+                updateSpaceUsed();
+                draw(); // Redraw with new diameter
+            });
+            
+            // Smart Suggestions
+            optimizeLayoutBtn.addEventListener('click', function() {
+                // Calculate optimal grid based on board size and sticker diameter
+                const boardWidth = appState.boardSize.width;
+                const boardHeight = appState.boardSize.height;
+                const stickerDiameter = appState.stickerDiameter;
+                
+                // Calculate how many stickers can fit
+                const horizontalFit = Math.floor(boardWidth / stickerDiameter);
+                const verticalFit = Math.floor(boardHeight / stickerDiameter);
+                
+                // Update grid
+                appState.grid.horizontal = Math.min(6, Math.max(1, horizontalFit));
+                appState.grid.vertical = Math.min(6, Math.max(1, verticalFit));
+                
+                // Update display
+                updateGridDisplay();
+                updateSpaceUsed();
+                draw(); // Redraw with optimized layout
+                
+                // Mark layout as configured
+                appState.hasLayout = true;
+                updateProgress();
+                
+                // Show notification
+                showNotification('Layout Optimized', `Grid adjusted to ${appState.grid.horizontal}×${appState.grid.vertical} for optimal fit`, 'success');
+            });
+            
+            maximizeStickersBtn.addEventListener('click', function() {
+                // Set grid to maximum
+                appState.grid.horizontal = 6;
+                appState.grid.vertical = 6;
+                
+                // Update display
+                updateGridDisplay();
+                updateSpaceUsed();
+                draw(); // Redraw with maximized layout
+                
+                // Mark layout as configured
+                appState.hasLayout = true;
+                updateProgress();
+                
+                // Show notification
+                showNotification('Stickers Maximized', 'Grid set to maximum capacity (6×6)', 'success');
+            });
+            
+            // Action Buttons
+            resetBtn.addEventListener('click', function() {
+                // Reset to default values
+                appState.logoUrl = defaultLogo;
+                appState.originalImage = null;
+                appState.boardSize = { width: 10, height: 15 };
+                appState.stickerDiameter = 5;
+                appState.outlineEnabled = true;
+                appState.outline.width = 10;
+                appState.outline.color = '#000000';
+                appState.outline.smoothing = true;
+                appState.grid.horizontal = 2;
+                appState.grid.vertical = 2;
+                appState.hasLogo = false;
+                appState.hasOutline = true;
+                appState.hasLayout = false;
+                
+                // Update UI
+                outlineWidth.value = appState.outline.width;
+                outlineWidthValue.textContent = `${appState.outline.width}px`;
+                outlineToggle.checked = appState.outlineEnabled;
+                outlineColorHex.value = appState.outline.color;
+                smoothingToggle.checked = appState.outline.smoothing;
+                boardSizeSelect.value = '10x15';
+                diameterInput.value = appState.stickerDiameter;
+                
+                // Reset logo
+                logoPreviewImg.src = defaultLogo;
+                logoPreviewName.textContent = 'Default Logo';
+                
+                // Load default logo
+                loadDefaultLogo();
+                
+                // Update displays
+                updateGridDisplay();
+                updateSizeDisplay();
+                updateSpaceUsed();
+                updateProgress();
+                draw(); // Redraw
+                
+                // Show notification
+                showNotification('Settings Reset', 'All settings have been reset to default', 'info');
+            });
+            
+            // Download button - generate sticker sheet
+            downloadBtn.addEventListener('click', function() {
+                generateStickerSheet();
+            });
+            
+            // Save Design Button
+            saveDesignBtn.addEventListener('click', function() {
+                // In a real implementation, this would save the design to user account
+                showNotification('Design Saved', 'Your design has been saved to your account', 'success');
+            });
+            
+            // Share Design Button
+            shareDesignBtn.addEventListener('click', function() {
+                // In a real implementation, this would open share dialog
+                showNotification('Share Ready', 'Share options are now available', 'info');
+            });
+            
+            confirmYesBtn.addEventListener('click', function() {
+                // Hide other messages
+                helpMessage.style.display = 'none';
+                
+                // Show success message
+                successMessage.style.display = 'block';
+                
+                // In a real Shopify implementation, this would add the item to cart
+                console.log('Sticker design confirmed with configuration:', appState);
+                
+                // Show notification
+                showNotification('Order Confirmed', 'Your design has been added to cart', 'success');
+                
+                // Scroll to confirmation message
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            });
+            
+            confirmHelpBtn.addEventListener('click', function() {
+                // Hide other messages
+                successMessage.style.display = 'none';
+                
+                // Show help message
+                helpMessage.style.display = 'block';
+                
+                // In a real implementation, this would trigger a support request
+                console.log('Help requested for sticker design');
+                
+                // Show notification
+                showNotification('Support Requested', 'Our team will contact you shortly', 'info');
+                
+                // Scroll to confirmation message
+                helpMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    helpMessage.style.display = 'none';
+                }, 5000);
+            });
+            
+            // Close notification
+            notificationClose.addEventListener('click', function() {
+                notificationToast.classList.remove('show');
+            });
+            
+            // Initialize Color Palette
+            function initializeColorPalette(paletteElement, colorInput, previewElement, configProperty) {
+                paletteElement.innerHTML = '';
+                
+                colorPalette.forEach(color => {
+                    const colorOption = document.createElement('div');
+                    colorOption.className = 'color-option';
+                    if (color === appState[configProperty].color) {
+                        colorOption.classList.add('active');
+                    }
+                    colorOption.style.backgroundColor = color;
+                    colorOption.setAttribute('data-color', color);
+                    
+                    colorOption.addEventListener('click', function() {
+                        // Remove active class from all options
+                        paletteElement.querySelectorAll('.color-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        
+                        // Add active class to clicked option
+                        this.classList.add('active');
+                        
+                        // Update color
+                        appState[configProperty].color = color;
+                        previewElement.style.backgroundColor = color;
+                        colorInput.value = color;               // Update input field
+                        
+                        // Update preview
+                        draw();
+                    });
+                    
+                    paletteElement.appendChild(colorOption);
+                });
+            }
+            
+            // Calculate space used percentage
+            function calculateSpaceUsed() {
+                const boardArea = appState.boardSize.width * appState.boardSize.height;
+                const stickerArea = Math.PI * Math.pow(appState.stickerDiameter / 2, 2);
+                const totalStickerArea = stickerArea * appState.grid.horizontal * appState.grid.vertical;
+                
+                return Math.min(100, Math.round((totalStickerArea / boardArea) * 100));
+            }
+            
+            // Update space used display
+            function updateSpaceUsed() {
+                const spaceUsed = calculateSpaceUsed();
+                spaceUsedValue.textContent = `${spaceUsed}%`;
+                totalStickersValue.textContent = appState.grid.horizontal * appState.grid.vertical;
+                
+                // Update color based on usage
+                if (spaceUsed < 50) {
+                    spaceUsedValue.style.color = '#ef4444';
+                } else if (spaceUsed < 80) {
+                    spaceUsedValue.style.color = '#f59e0b';
+                } else {
+                    spaceUsedValue.style.color = '#10b981';
+                }
+            }
+            
+            // Update Size Display
+            function updateSizeDisplay() {
+                // Update board label
+                boardLabel.textContent = `Board ${appState.boardSize.width} × ${appState.boardSize.height} cm`;
+                boardSizeValue.textContent = `${appState.boardSize.width} × ${appState.boardSize.height} cm`;
+                
+                // Update sticker diameter
+                stickerDiameterValue.textContent = `${appState.stickerDiameter} cm`;
+                
+                // Update button states
+                diameterDecrease.disabled = appState.stickerDiameter <= 1;
+                diameterIncrease.disabled = appState.stickerDiameter >= 20;
+            }
+            
+            // Update Grid Display
+            function updateGridDisplay() {
+                horizontalValue.textContent = appState.grid.horizontal;
+                verticalValue.textContent = appState.grid.vertical;
+                
+                // Update button states
+                horizontalDecrease.disabled = appState.grid.horizontal <= 1;
+                horizontalIncrease.disabled = appState.grid.horizontal >= 6;
+                verticalDecrease.disabled = appState.grid.vertical <= 1;
+                verticalIncrease.disabled = appState.grid.vertical >= 6;
+                
+                // Mark layout as configured
+                if (appState.grid.horizontal > 2 || appState.grid.vertical > 2) {
+                    appState.hasLayout = true;
+                    updateProgress();
+                }
+                
+                updateSpaceUsed();
+            }
+            
+            // Dynamic canvas sizing based on grid layout
+            function updateCanvasSize() {
+                const cols = appState.grid.horizontal;
+                const rows = appState.grid.vertical;
+                
+                // Base sticker size (will be adjusted for readability)
+                const baseStickerSize = 60; // pixels
+                const gap = 15; // pixels between stickers
+                const padding = 30; // padding around the grid
+                
+                // Calculate total dimensions
+                const totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
+                const totalHeight = rows * baseStickerSize + (rows - 1) * gap + padding * 2;
+                
+                // Set canvas size
+                canvas.width = totalWidth;
+                canvas.height = totalHeight;
+                
+                // Update container sizes to fit content
+                previewBoard.style.width = totalWidth + 'px';
+                previewBoard.style.height = totalHeight + 'px';
+                canvasContainer.style.width = totalWidth + 'px';
+                canvasContainer.style.height = totalHeight + 'px';
+                
+                // Add smooth transition
+                previewBoard.style.transition = 'width 0.3s ease, height 0.3s ease';
+                canvasContainer.style.transition = 'width 0.3s ease, height 0.3s ease';
+            }
+            
+            // Main draw function with dynamic container sizing and grid layout
+            function draw() {
+                if (!appState.originalImage) return;
+                
+                // Update canvas size based on grid
+                updateCanvasSize();
+                
+                const width = canvas.width;
+                const height = canvas.height;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, width, height);
+                
+                // Draw a subtle grid background for the board
+                ctx.fillStyle = '#f8f9fa';
+                ctx.fillRect(0, 0, width, height);
+                
+                const outlineWidth = appState.outlineEnabled ? appState.outline.width : 0;
+                const outlineColor = appState.outline.color;
+                const smooth = appState.outline.smoothing;
+                
+                // Calculate grid layout
+                const cols = appState.grid.horizontal;
+                const rows = appState.grid.vertical;
+                
+                // Get sticker size from canvas dimensions
+                const padding = 30;
+                const gap = 15;
+                const availableWidth = width - (padding * 2);
+                const availableHeight = height - (padding * 2);
+                
+                // Calculate sticker size based on grid and available space
+                const stickerSize = Math.min(
+                    (availableWidth - (cols - 1) * gap) / cols,
+                    (availableHeight - (rows - 1) * gap) / rows
+                );
+                
+                // Calculate starting position to center the grid
+                const totalWidth = cols * stickerSize + (cols - 1) * gap;
+                const totalHeight = rows * stickerSize + (rows - 1) * gap;
+                const startX = (width - totalWidth) / 2;
+                const startY = (height - totalHeight) / 2;
+                
+                // Draw each sticker in the grid
+                for (let row = 0; row < rows; row++) {
+                    for (let col = 0; col < cols; col++) {
+                        const stickerX = startX + col * (stickerSize + gap);
+                        const stickerY = startY + row * (stickerSize + gap);
+                        const centerX = stickerX + stickerSize / 2;
+                        const centerY = stickerY + stickerSize / 2;
+                        
+                        // Create a temporary canvas for this sticker
+                        const tempCanvas = document.createElement('canvas');
+                        tempCanvas.width = stickerSize;
+                        tempCanvas.height = stickerSize;
+                        const tempCtx = tempCanvas.getContext('2d');
+                        
+                        // Clear temp canvas
+                        tempCtx.clearRect(0, 0, stickerSize, stickerSize);
+                        
+                        // Draw sticker background circle
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fill();
+                        
+                        // Add subtle shadow
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                        ctx.shadowBlur = 4;
+                        ctx.shadowOffsetX = 2;
+                        ctx.shadowOffsetY = 2;
+                        
+                        // Calculate image size for this sticker
+                        const imgW = appState.originalImage.width;
+                        const imgH = appState.originalImage.height;
+                        const maxImgSize = stickerSize * 0.7; // Logo takes up 70% of sticker
+                        
+                        const imgScale = Math.min(maxImgSize / imgW, maxImgSize / imgH);
+                        const drawW = imgW * imgScale;
+                        const drawH = imgH * imgScale;
+                        const imgX = centerX - drawW / 2;
+                        const imgY = centerY - drawH / 2;
+                        
+                        // Draw image on temp canvas
+                        tempCtx.drawImage(appState.originalImage, imgX - stickerX, imgY - stickerY, drawW, drawH);
+                        
+                        if (outlineWidth > 0) {
+                            // Generate Outline using distance transform algorithm for this sticker
+                            const imageData = tempCtx.getImageData(0, 0, stickerSize, stickerSize);
+                            const data = imageData.data;
+                            
+                            // Create a mask: 0 for empty, 1 for object
+                            const distMap = new Float32Array(stickerSize * stickerSize);
+                            const INF = 1e9;
+                            
+                            // Initialize Distance Map
+                            for (let i = 0; i < stickerSize * stickerSize; i++) {
+                                // Check alpha channel (every 4th byte)
+                                if (data[i * 4 + 3] > 10) { // Threshold for "opaque"
+                                    distMap[i] = 0;
+                                } else {
+                                    distMap[i] = INF;
+                                }
+                            }
+                            
+                            // Fast Euclidean Distance Transform (EDT) - Two-pass algorithm
+                            // Pass 1: Top-Left to Bottom-Right
+                            for (let y = 0; y < stickerSize; y++) {
+                                for (let x = 0; x < stickerSize; x++) {
+                                    const idx = y * stickerSize + x;
+                                    if (distMap[idx] === 0) continue;
+                                    
+                                    let min = distMap[idx];
+                                    // Check neighbors: Left, Top-Left, Top, Top-Right
+                                    if (x > 0) min = Math.min(min, distMap[idx - 1] + 1); // Left
+                                    if (y > 0) {
+                                        min = Math.min(min, distMap[idx - stickerSize] + 1); // Top
+                                        if (x > 0) min = Math.min(min, distMap[idx - stickerSize - 1] + 1.414); // Top-Left
+                                        if (x < stickerSize - 1) min = Math.min(min, distMap[idx - stickerSize + 1] + 1.414); // Top-Right
+                                    }
+                                    distMap[idx] = min;
+                                }
+                            }
+                            
+                            // Pass 2: Bottom-Right to Top-Left
+                            for (let y = stickerSize - 1; y >= 0; y--) {
+                                for (let x = stickerSize - 1; x >= 0; x--) {
+                                    const idx = y * stickerSize + x;
+                                    if (distMap[idx] === 0) continue;
+                                    
+                                    let min = distMap[idx];
+                                    // Check neighbors: Right, Bottom-Right, Bottom, Bottom-Left
+                                    if (x < stickerSize - 1) min = Math.min(min, distMap[idx + 1] + 1); // Right
+                                    if (y < stickerSize - 1) {
+                                        min = Math.min(min, distMap[idx + stickerSize] + 1); // Bottom
+                                        if (x < stickerSize - 1) min = Math.min(min, distMap[idx + stickerSize + 1] + 1.414); // Bottom-Right
+                                        if (x > 0) min = Math.min(min, distMap[idx + stickerSize - 1] + 1.414); // Bottom-Left
+                                    }
+                                    distMap[idx] = min;
+                                }
+                            }
+                            
+                            // Draw the outline based on distance
+                            const [r, g, b] = hexToRgb(outlineColor);
+                            const resultData = ctx.createImageData(stickerSize, stickerSize);
+                            const res = resultData.data;
+                            
+                            for (let i = 0; i < stickerSize * stickerSize; i++) {
+                                const dist = distMap[i];
+                                if (dist <= outlineWidth) {
+                                    // Inside the outline zone
+                                    let alpha = 255;
+                                    if (smooth && dist > outlineWidth - 1) {
+                                        // Fade out at the edge
+                                        alpha = 255 * (1 - (dist - (outlineWidth - 1)));
+                                    }
+                                    
+                                    res[i * 4] = r;
+                                    res[i * 4 + 1] = g;
+                                    res[i * 4 + 2] = b;
+                                    res[i * 4 + 3] = alpha;
+                                }
+                            }
+                            
+                            // Put the outline on the main canvas
+                            ctx.putImageData(resultData, stickerX, stickerY);
+                        }
+                        
+                        // Reset shadow and draw the image on top
+                        ctx.shadowColor = 'transparent';
+                        ctx.drawImage(appState.originalImage, imgX, imgY, drawW, drawH);
+                        
+                        // Circle border removed - stickers now have clean edges
+                    }
+                }
+                
+                // Update the total stickers display
+                totalStickersValue.textContent = cols * rows;
+            }
+            
+            // Generate sticker sheet for download - exact preview copy
+            function generateStickerSheet() {
+                try {
+                    showNotification('Generating Sticker Sheet', 'Creating high-quality sticker sheet for download', 'info');
+                    
+                    // First, capture the current preview canvas content
+                    // Create a high-resolution version by scaling up the current canvas
+                    const previewCanvas = canvas;
+                    const previewCtx = previewCanvas.getContext('2d');
+                    
+                    // Calculate scale factor for high resolution (300 DPI)
+                    const dpi = 300;
+                    const previewWidth = previewCanvas.width;
+                    const previewHeight = previewCanvas.height;
+                    
+                    // Create high-resolution canvas
+                    const sheetCanvas = document.createElement('canvas');
+                    const sheetCtx = sheetCanvas.getContext('2d');
+                    
+                    // Set canvas size - scale up proportionally
+                    const scaleFactor = 4; // 4x resolution for print quality
+                    sheetCanvas.width = previewWidth * scaleFactor;
+                    sheetCanvas.height = previewHeight * scaleFactor;
+                    
+                    // Set high-quality scaling
+                    sheetCtx.imageSmoothingEnabled = true;
+                    sheetCtx.imageSmoothingQuality = 'high';
+                    
+                    // Fill background with white (card background)
+                    sheetCtx.fillStyle = '#ffffff';
+                    sheetCtx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
+                    
+                    // Copy the exact preview content scaled up
+                    sheetCtx.drawImage(previewCanvas, 0, 0, previewWidth, previewHeight, 0, 0, sheetCanvas.width, sheetCanvas.height);
+                    
+                    // Add subtle border to match preview card style
+                    sheetCtx.strokeStyle = '#e2e8f0';
+                    sheetCtx.lineWidth = 2 * scaleFactor;
+                    sheetCtx.strokeRect(0, 0, sheetCanvas.width, sheetCanvas.height);
+                    
+                    // Add a subtle shadow effect around the edges
+                    sheetCtx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                    sheetCtx.shadowBlur = 10 * scaleFactor;
+                    sheetCtx.shadowOffsetX = 0;
+                    sheetCtx.shadowOffsetY = 5 * scaleFactor;
+                    
+                    // Add a drop shadow around the entire card
+                    sheetCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                    sheetCtx.lineWidth = 1 * scaleFactor;
+                    sheetCtx.strokeRect(-5 * scaleFactor, -5 * scaleFactor, sheetCanvas.width + 10 * scaleFactor, sheetCanvas.height + 10 * scaleFactor);
+                    
+                    // Reset shadow
+                    sheetCtx.shadowColor = 'transparent';
+                    
+                    // Add text information at the bottom (scaled up)
+                    sheetCtx.fillStyle = '#666666';
+                    sheetCtx.font = `${12 * scaleFactor}px Inter, sans-serif`;
+                    sheetCtx.textAlign = 'center';
+                    const cols = appState.grid.horizontal;
+                    const rows = appState.grid.vertical;
+                    const infoText = `Board: ${appState.boardSize.width}×${appState.boardSize.height}cm | Stickers: ${cols}×${rows} | Diameter: ${appState.stickerDiameter}cm`;
+                    sheetCtx.fillText(infoText, sheetCanvas.width / 2, sheetCanvas.height - 20 * scaleFactor);
+                    
+                    // Convert canvas to blob and download
+                    sheetCanvas.toBlob(function(blob) {
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `sticker-preview-${appState.boardSize.width}x${appState.boardSize.height}cm-${cols}x${rows}-highres.png`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        
+                        setTimeout(() => {
+                            showNotification('Download Complete', 'Your high-resolution sticker preview has been downloaded', 'success');
+                        }, 500);
+                    }, 'image/png', 1.0);
+                    
+                } catch (error) {
+                    console.error('Download error:', error);
+                    showNotification('Download Failed', 'There was an error generating your sticker sheet', 'error');
+                }
+            }
+            
+            // Convert hex color to RGB
+            function hexToRgb(hex) {
+                const bigint = parseInt(hex.slice(1), 16);
+                const r = (bigint >> 16) & 255;
+                const g = (bigint >> 8) & 255;
+                const b = bigint & 255;
+                return [r, g, b];
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                // Debounce resize events
+                clearTimeout(window.resizeTimer);
+                window.resizeTimer = setTimeout(function() {
+                    // Adjust canvas size if needed
+                    draw();
+                }, 250);
+            });
+            
+            // Initialize the app
+            initApp();
+        });
+    </script>
+</body>
+</html>
