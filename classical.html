@@ -1113,21 +1113,65 @@
             font-size: 1rem;
         }
         
-        /* Responsive Design */
-        @media (max-width: 1024px) {
+        /* Enhanced Responsive Design */
+        
+        /* Large Desktop (1400px+) */
+        @media (min-width: 1400px) {
             .app-container {
-                grid-template-columns: 300px 1fr;
+                max-width: 1600px;
+                grid-template-columns: 400px 1fr;
             }
             
             .controls-panel {
-                height: calc(100vh - 180px);
-                top: calc(100px + 4rem);
+                width: 400px;
             }
         }
         
-        @media (max-width: 768px) {
+        /* Standard Desktop (1200px - 1399px) */
+        @media (min-width: 1200px) and (max-width: 1399px) {
+            .app-container {
+                grid-template-columns: 380px 1fr;
+            }
+            
+            .controls-panel {
+                width: 380px;
+            }
+        }
+        
+        /* Large Laptop (1024px - 1199px) */
+        @media (min-width: 1024px) and (max-width: 1199px) {
+            .app-container {
+                grid-template-columns: 320px 1fr;
+                padding: 0.75rem;
+            }
+            
+            .controls-panel {
+                width: 320px;
+                height: calc(100vh - 160px);
+                top: calc(100px + 3rem);
+            }
+            
+            .preview-board-container {
+                padding: 0.75rem;
+            }
+        }
+        
+        /* Small Laptop / Large Tablet (768px - 1023px) */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .app-container {
+                grid-template-columns: 280px 1fr;
+                padding: 0.5rem;
+                gap: 0.75rem;
+            }
+            
+            .controls-panel {
+                width: 280px;
+                height: calc(100vh - 140px);
+                top: calc(100px + 2.5rem);
+            }
+            
             .app-header-content {
-                padding: 0 0.5rem;
+                padding: 0 0.75rem;
             }
             
             .app-logo h1 {
@@ -1135,7 +1179,37 @@
             }
             
             .app-actions {
-                display: none;
+                gap: 0.75rem;
+            }
+            
+            .preview-specs {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            
+            .size-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+        
+        /* Tablet (576px - 767px) */
+        @media (min-width: 576px) and (max-width: 767px) {
+            .app-header-content {
+                padding: 0 0.5rem;
+            }
+            
+            .app-logo h1 {
+                font-size: 1.125rem;
+            }
+            
+            .app-actions {
+                gap: 0.5rem;
+            }
+            
+            .app-action-btn {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.875rem;
             }
             
             .mobile-menu-toggle {
@@ -1152,8 +1226,8 @@
                 position: fixed;
                 top: 0;
                 left: -100%;
-                width: 85%;
-                max-width: 350px;
+                width: 80%;
+                max-width: 320px;
                 height: 100vh;
                 z-index: 200;
                 transition: left 0.3s ease;
@@ -1165,12 +1239,21 @@
                 left: 0;
             }
             
-            .controls-panel-overlay.show {
+            .controls-panel-overlay {
                 display: block;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .controls-panel-overlay.show {
+                opacity: 1;
+                visibility: visible;
             }
             
             .preview-specs {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
             }
             
             .confirmation-actions {
@@ -1178,42 +1261,138 @@
             }
             
             .preview-board-container {
-                min-height: 200px;
+                min-height: 220px;
+                padding: 0.75rem;
             }
             
             .size-controls {
                 flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .progress-indicator {
+                padding: 0.75rem 0.5rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+            
+            .progress-step {
+                min-width: calc(25% - 0.375rem);
+            }
+            
+            .progress-step-label {
+                font-size: 0.7rem;
             }
         }
         
-        @media (max-width: 480px) {
+        /* Mobile (up to 575px) */
+        @media (max-width: 575px) {
             .app-header {
                 padding: 0.75rem 0.5rem;
             }
             
+            .app-header-content {
+                padding: 0 0.25rem;
+            }
+            
+            .app-logo {
+                gap: 0.5rem;
+            }
+            
+            .app-logo h1 {
+                font-size: 1rem;
+            }
+            
+            .app-logo i {
+                font-size: 1.25rem;
+            }
+            
+            .app-actions {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+                padding: 0.375rem;
+                font-size: 1.25rem;
+            }
+            
             .app-container {
                 padding: 0.25rem;
+                gap: 0.25rem;
+            }
+            
+            .controls-panel {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 90%;
+                max-width: 300px;
+                height: 100vh;
+                z-index: 200;
+                transition: left 0.3s ease;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            
+            .controls-panel.open {
+                left: 0;
+            }
+            
+            .controls-panel-overlay {
+                display: block;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .controls-panel-overlay.show {
+                opacity: 1;
+                visibility: visible;
             }
             
             .preview-header {
-                padding: 0.75rem;
+                padding: 0.75rem 0.5rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.75rem;
             }
             
             .preview-title {
                 font-size: 1rem;
+                text-align: center;
+            }
+            
+            .preview-actions {
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .preview-action-btn {
+                flex: 1;
+                max-width: 120px;
+                justify-content: center;
             }
             
             .preview-content {
-                padding: 0.75rem;
+                padding: 0.5rem;
             }
             
             .preview-board-container {
-                padding: 0.75rem;
-                min-height: 180px;
+                padding: 0.5rem;
+                min-height: 200px;
             }
             
             .confirmation-section {
-                padding: 0.75rem;
+                padding: 0.75rem 0.5rem;
+            }
+            
+            .confirmation-title {
+                font-size: 0.9rem;
+            }
+            
+            .confirmation-text {
+                font-size: 0.8rem;
             }
             
             .preview-specs {
@@ -1221,58 +1400,269 @@
                 gap: 0.5rem;
             }
             
+            .preview-spec {
+                padding: 0.5rem;
+            }
+            
+            .preview-spec-title {
+                font-size: 0.7rem;
+            }
+            
+            .preview-spec-value {
+                font-size: 0.8rem;
+            }
+            
             .controls-tab {
                 padding: 0.75rem 0.25rem;
-                font-size: 0.75rem;
+                font-size: 0.7rem;
             }
             
             .controls-tab i {
                 font-size: 0.875rem;
+                margin-bottom: 0.125rem;
+            }
+            
+            .controls-content {
+                padding: 0.75rem;
+            }
+            
+            .control-section {
+                margin-bottom: 1rem;
             }
             
             .control-section-title {
                 font-size: 0.8rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .control-section-title i {
+                font-size: 0.8rem;
             }
             
             .logo-upload-container {
-                padding: 0.75rem;
+                padding: 0.75rem 0.5rem;
             }
             
             .logo-upload-icon {
                 font-size: 1.25rem;
+                margin-bottom: 0.375rem;
             }
             
             .logo-upload-text {
                 font-size: 0.75rem;
+                margin-bottom: 0.125rem;
             }
             
             .logo-upload-subtext {
                 font-size: 0.625rem;
             }
             
+            .outline-toggle-container {
+                padding: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            
+            .outline-controls {
+                padding: 0.5rem;
+            }
+            
+            .slider-control {
+                margin-bottom: 0.5rem;
+            }
+            
+            .slider-label {
+                font-size: 0.8rem;
+                margin-bottom: 0.375rem;
+            }
+            
+            .color-control {
+                margin-bottom: 0.5rem;
+            }
+            
+            .size-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+                margin-top: 0.5rem;
+            }
+            
+            .size-control {
+                padding: 0.5rem;
+            }
+            
+            .size-control-label {
+                font-size: 0.8rem;
+                margin-bottom: 0.375rem;
+            }
+            
+            .number-input-container {
+                gap: 0.25rem;
+            }
+            
+            .number-input-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.75rem;
+            }
+            
+            .number-input {
+                padding: 0.375rem;
+                font-size: 0.8rem;
+            }
+            
+            .smart-suggestions {
+                margin-top: 0.5rem;
+                padding: 0.5rem;
+            }
+            
+            .smart-suggestions-title {
+                font-size: 0.8rem;
+                margin-bottom: 0.375rem;
+            }
+            
+            .smart-suggestion-item {
+                padding: 0.375rem;
+                margin-bottom: 0.375rem;
+            }
+            
+            .smart-suggestion-text {
+                font-size: 0.75rem;
+            }
+            
             .progress-indicator {
-                padding: 0.75rem 0.5rem;
+                padding: 0.5rem 0.25rem;
+                flex-wrap: wrap;
+                gap: 0.25rem;
+            }
+            
+            .progress-step {
+                min-width: calc(25% - 0.1875rem);
             }
             
             .progress-step-circle {
                 width: 1.5rem;
                 height: 1.5rem;
-                font-size: 0.75rem;
+                font-size: 0.7rem;
+                margin-bottom: 0.25rem;
+            }
+            
+            .progress-step-label {
+                font-size: 0.65rem;
+                line-height: 1.2;
+            }
+            
+            .notification-toast {
+                bottom: 0.75rem;
+                right: 0.75rem;
+                left: 0.75rem;
+                max-width: none;
+                transform: translateY(120%);
+            }
+            
+            .notification-toast.show {
+                transform: translateY(0);
             }
         }
         
-        @media (min-width: 1025px) and (max-height: 900px) {
-            .controls-panel {
-                height: calc(100vh - 150px);
-                top: calc(80px + 4rem);
+        /* Extra Small Mobile (up to 375px) */
+        @media (max-width: 375px) {
+            .app-header {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .app-logo h1 {
+                font-size: 0.9rem;
+            }
+            
+            .app-logo i {
+                font-size: 1.1rem;
+            }
+            
+            .mobile-menu-toggle {
+                font-size: 1.1rem;
+                padding: 0.25rem;
+            }
+            
+            .app-container {
+                padding: 0.125rem;
+                gap: 0.125rem;
             }
             
             .controls-content {
-                max-height: calc(100vh - 250px);
+                padding: 0.5rem;
+            }
+            
+            .preview-header {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .preview-title {
+                font-size: 0.9rem;
+            }
+            
+            .preview-action-btn {
+                padding: 0.375rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            
+            .preview-content {
+                padding: 0.375rem;
+            }
+            
+            .preview-board-container {
+                padding: 0.375rem;
+                min-height: 180px;
+            }
+            
+            .confirmation-section {
+                padding: 0.5rem 0.25rem;
+            }
+            
+            .confirmation-title {
+                font-size: 0.85rem;
+            }
+            
+            .confirmation-text {
+                font-size: 0.75rem;
+            }
+            
+            .confirmation-btn {
+                padding: 0.5rem;
+                font-size: 0.8rem;
             }
         }
         
-        @media (min-width: 1025px) and (min-height: 901px) {
+        /* Height-based adjustments for desktop */
+        @media (min-width: 1024px) and (max-height: 800px) {
+            .controls-panel {
+                height: calc(100vh - 140px);
+                top: calc(100px + 2rem);
+            }
+            
+            .controls-content {
+                max-height: calc(100vh - 220px);
+            }
+            
+            .app-header {
+                padding: 0.75rem 1rem;
+            }
+            
+            .progress-indicator {
+                padding: 0.75rem 1rem;
+            }
+        }
+        
+        @media (min-width: 1024px) and (min-height: 801px) and (max-height: 1000px) {
+            .controls-panel {
+                height: calc(100vh - 160px);
+                top: calc(100px + 3rem);
+            }
+            
+            .controls-content {
+                max-height: calc(100vh - 240px);
+            }
+        }
+        
+        @media (min-width: 1024px) and (min-height: 1001px) {
             .controls-panel {
                 height: calc(100vh - 180px);
                 top: calc(100px + 4rem);
@@ -1283,14 +1673,42 @@
             }
         }
         
-        @media (min-width: 1025px) and (min-height: 1200px) {
-            .controls-panel {
-                height: calc(100vh - 200px);
-                top: calc(100px + 4rem);
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .controls-tab {
+                padding: 1rem 0.5rem;
             }
             
-            .controls-content {
-                max-height: calc(100vh - 300px);
+            .app-action-btn,
+            .preview-action-btn,
+            .confirmation-btn {
+                min-height: 44px;
+                touch-action: manipulation;
+            }
+            
+            .number-input-btn {
+                min-width: 44px;
+                min-height: 44px;
+            }
+            
+            .slider {
+                height: 8px;
+            }
+            
+            .slider::-webkit-slider-thumb {
+                width: 24px;
+                height: 24px;
+            }
+        }
+        
+        /* High DPI display optimizations */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .preview-board {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            }
+            
+            .controls-panel {
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             }
         }
     </style>
@@ -1441,52 +1859,6 @@
                 
                 <!-- Layout Tab -->
                 <div class="tab-content hidden" id="layoutTab">
-                    <!-- Grid Controls -->
-                    <div class="control-section" id="gridSection">
-                        <div class="control-section-title">
-                            <i class="fas fa-th"></i>
-                            Grid Layout
-                            <div class="help-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Adjust number of stickers horizontally and vertically on your board.</span>
-                            </div>
-                        </div>
-                        
-                        <div class="grid-controls">
-                            <div class="grid-control">
-                                <div class="grid-control-label">
-                                    <i class="fas fa-arrows-alt-h"></i>
-                                    Horizontal
-                                </div>
-                                <div class="grid-control-inputs">
-                                    <button class="grid-control-btn" id="horizontalDecrease">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <div class="grid-control-value" id="horizontalValue">2</div>
-                                    <button class="grid-control-btn" id="horizontalIncrease">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="grid-control">
-                                <div class="grid-control-label">
-                                    <i class="fas fa-arrows-alt-v"></i>
-                                    Vertical
-                                </div>
-                                <div class="grid-control-inputs">
-                                    <button class="grid-control-btn" id="verticalDecrease">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <div class="grid-control-value" id="verticalValue">2</div>
-                                    <button class="grid-control-btn" id="verticalIncrease">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
                     <!-- Size Controls -->
                     <div class="control-section" id="sizeSection">
                         <div class="control-section-title">
@@ -1494,7 +1866,7 @@
                             Size Settings
                             <div class="help-tooltip">
                                 <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Select your board size and sticker diameter. We'll automatically optimize the layout.</span>
+                                <span class="tooltip-text">Select your board size and sticker diameter. Layout will automatically optimize for perfect fit.</span>
                             </div>
                         </div>
                         
@@ -1531,19 +1903,15 @@
                             </div>
                         </div>
                         
-                        <!-- Smart Suggestions -->
-                        <div class="smart-suggestions" id="smartSuggestions">
+                        <!-- Auto-Optimization Notice -->
+                        <div class="smart-suggestions" id="autoOptimizationNotice">
                             <div class="smart-suggestions-title">
-                                <i class="fas fa-lightbulb"></i>
-                                Smart Suggestions
+                                <i class="fas fa-magic"></i>
+                                Auto-Optimization Active
                             </div>
-                            <div class="smart-suggestion-item" id="optimizeLayoutBtn">
-                                <div class="smart-suggestion-text">Optimize layout for current settings</div>
-                                <button class="smart-suggestion-apply">Apply</button>
-                            </div>
-                            <div class="smart-suggestion-item" id="maximizeStickersBtn">
-                                <div class="smart-suggestion-text">Maximize number of stickers</div>
-                                <button class="smart-suggestion-apply">Apply</button>
+                            <div class="smart-suggestion-item">
+                                <div class="smart-suggestion-text">Layout automatically optimizes when you change board size or diameter</div>
+                                <div class="smart-suggestion-apply" style="background: #10b981;">Perfect Fit</div>
                             </div>
                         </div>
                     </div>
@@ -1684,15 +2052,6 @@
             const previewBoard = document.getElementById('previewBoard');
             const canvasContainer = document.getElementById('canvasContainer');
             
-            // Grid Elements
-            const gridSection = document.getElementById('gridSection');
-            const horizontalDecrease = document.getElementById('horizontalDecrease');
-            const horizontalIncrease = document.getElementById('horizontalIncrease');
-            const horizontalValue = document.getElementById('horizontalValue');
-            const verticalDecrease = document.getElementById('verticalDecrease');
-            const verticalIncrease = document.getElementById('verticalIncrease');
-            const verticalValue = document.getElementById('verticalValue');
-            
             // Size Elements
             const sizeSection = document.getElementById('sizeSection');
             const boardSizeSelect = document.getElementById('boardSizeSelect');
@@ -1700,10 +2059,8 @@
             const diameterIncrease = document.getElementById('diameterIncrease');
             const diameterInput = document.getElementById('diameterInput');
             
-            // Smart Suggestions
-            const smartSuggestions = document.getElementById('smartSuggestions');
-            const optimizeLayoutBtn = document.getElementById('optimizeLayoutBtn');
-            const maximizeStickersBtn = document.getElementById('maximizeStickersBtn');
+            // Auto-Optimization Notice
+            const autoOptimizationNotice = document.getElementById('autoOptimizationNotice');
             
             // Preview Elements
             const boardLabel = document.getElementById('boardLabel');
@@ -1790,8 +2147,8 @@
                 // Load default logo
                 loadDefaultLogo();
                 
-                // Set grid display
-                updateGridDisplay();
+                // Auto-optimize layout based on current settings
+                autoOptimizeLayout();
                 
                 // Update size display
                 updateSizeDisplay();
@@ -2064,42 +2421,32 @@
                 draw();
             });
             
-            // Grid Controls
-            horizontalDecrease.addEventListener('click', function() {
-                if (appState.grid.horizontal > 1) {
-                    appState.grid.horizontal--;
-                    updateGridDisplay();
-                    updateSpaceUsed();
-                    draw(); // Redraw with new grid layout
-                }
-            });
-            
-            horizontalIncrease.addEventListener('click', function() {
-                if (appState.grid.horizontal < 6) {
-                    appState.grid.horizontal++;
-                    updateGridDisplay();
-                    updateSpaceUsed();
-                    draw(); // Redraw with new grid layout
-                }
-            });
-            
-            verticalDecrease.addEventListener('click', function() {
-                if (appState.grid.vertical > 1) {
-                    appState.grid.vertical--;
-                    updateGridDisplay();
-                    updateSpaceUsed();
-                    draw(); // Redraw with new grid layout
-                }
-            });
-            
-            verticalIncrease.addEventListener('click', function() {
-                if (appState.grid.vertical < 6) {
-                    appState.grid.vertical++;
-                    updateGridDisplay();
-                    updateSpaceUsed();
-                    draw(); // Redraw with new grid layout
-                }
-            });
+            // Auto-optimize layout function
+            function autoOptimizeLayout() {
+                // Calculate optimal grid based on board size and sticker diameter
+                const boardWidth = appState.boardSize.width;
+                const boardHeight = appState.boardSize.height;
+                const stickerDiameter = appState.stickerDiameter;
+                
+                // Calculate how many stickers can fit perfectly
+                const horizontalFit = Math.floor(boardWidth / stickerDiameter);
+                const verticalFit = Math.floor(boardHeight / stickerDiameter);
+                
+                // Update grid with perfect fit
+                appState.grid.horizontal = Math.min(6, Math.max(1, horizontalFit));
+                appState.grid.vertical = Math.min(6, Math.max(1, verticalFit));
+                
+                // Update display
+                updateSpaceUsed();
+                draw(); // Redraw with optimized layout
+                
+                // Mark layout as configured
+                appState.hasLayout = true;
+                updateProgress();
+                
+                // Show notification
+                showNotification('Layout Auto-Optimized', `Perfect fit: ${appState.grid.horizontal}×${appState.grid.vertical} stickers`, 'success');
+            }
             
             // Size Controls
             boardSizeSelect.addEventListener('change', function() {
@@ -2107,7 +2454,7 @@
                 appState.boardSize = boardSizeOptions[selectedSize];
                 updateSizeDisplay();
                 updateSpaceUsed();
-                draw(); // Redraw with new size
+                autoOptimizeLayout(); // Automatically optimize layout for new board size
             });
             
             diameterDecrease.addEventListener('click', function() {
@@ -2118,7 +2465,7 @@
                     appState.stickerDiameter = newValue;
                     updateSizeDisplay();
                     updateSpaceUsed();
-                    draw(); // Redraw with new diameter
+                    autoOptimizeLayout(); // Automatically optimize layout for new diameter
                 }
             });
             
@@ -2130,7 +2477,7 @@
                     appState.stickerDiameter = newValue;
                     updateSizeDisplay();
                     updateSpaceUsed();
-                    draw(); // Redraw with new diameter
+                    autoOptimizeLayout(); // Automatically optimize layout for new diameter
                 }
             });
             
@@ -2142,53 +2489,7 @@
                 appState.stickerDiameter = value;
                 updateSizeDisplay();
                 updateSpaceUsed();
-                draw(); // Redraw with new diameter
-            });
-            
-            // Smart Suggestions
-            optimizeLayoutBtn.addEventListener('click', function() {
-                // Calculate optimal grid based on board size and sticker diameter
-                const boardWidth = appState.boardSize.width;
-                const boardHeight = appState.boardSize.height;
-                const stickerDiameter = appState.stickerDiameter;
-                
-                // Calculate how many stickers can fit
-                const horizontalFit = Math.floor(boardWidth / stickerDiameter);
-                const verticalFit = Math.floor(boardHeight / stickerDiameter);
-                
-                // Update grid
-                appState.grid.horizontal = Math.min(6, Math.max(1, horizontalFit));
-                appState.grid.vertical = Math.min(6, Math.max(1, verticalFit));
-                
-                // Update display
-                updateGridDisplay();
-                updateSpaceUsed();
-                draw(); // Redraw with optimized layout
-                
-                // Mark layout as configured
-                appState.hasLayout = true;
-                updateProgress();
-                
-                // Show notification
-                showNotification('Layout Optimized', `Grid adjusted to ${appState.grid.horizontal}×${appState.grid.vertical} for optimal fit`, 'success');
-            });
-            
-            maximizeStickersBtn.addEventListener('click', function() {
-                // Set grid to maximum
-                appState.grid.horizontal = 6;
-                appState.grid.vertical = 6;
-                
-                // Update display
-                updateGridDisplay();
-                updateSpaceUsed();
-                draw(); // Redraw with maximized layout
-                
-                // Mark layout as configured
-                appState.hasLayout = true;
-                updateProgress();
-                
-                // Show notification
-                showNotification('Stickers Maximized', 'Grid set to maximum capacity (6×6)', 'success');
+                autoOptimizeLayout(); // Automatically optimize layout for new diameter
             });
             
             // Action Buttons
@@ -2225,7 +2526,6 @@
                 loadDefaultLogo();
                 
                 // Update displays
-                updateGridDisplay();
                 updateSizeDisplay();
                 updateSpaceUsed();
                 updateProgress();
@@ -2375,25 +2675,9 @@
                 diameterIncrease.disabled = appState.stickerDiameter >= 20;
             }
             
-            // Update Grid Display
-            function updateGridDisplay() {
-                horizontalValue.textContent = appState.grid.horizontal;
-                verticalValue.textContent = appState.grid.vertical;
-                
-                // Update button states
-                horizontalDecrease.disabled = appState.grid.horizontal <= 1;
-                horizontalIncrease.disabled = appState.grid.horizontal >= 6;
-                verticalDecrease.disabled = appState.grid.vertical <= 1;
-                verticalIncrease.disabled = appState.grid.vertical >= 6;
-                
-                // Mark layout as configured
-                if (appState.grid.horizontal > 2 || appState.grid.vertical > 2) {
-                    appState.hasLayout = true;
-                    updateProgress();
-                }
-                
-                updateSpaceUsed();
-            }
+            // Grid display function-optimization instead
+            // Layout is size or diameter changes
+            // No manual grid controls needed with the new auto automatically optimized when board removed - using auto-fit system
             
             // Dynamic canvas sizing based on grid layout
             function updateCanvasSize() {
@@ -2424,12 +2708,12 @@
                 canvasContainer.style.transition = 'width 0.3s ease, height 0.3s ease';
             }
             
-            // Main draw function with dynamic container sizing and grid layout
+            // Main draw function with original resolution support
             function draw() {
                 if (!appState.originalImage) return;
                 
-                // Update canvas size based on grid
-                updateCanvasSize();
+                // Update canvas size based on grid with original resolution support
+                updateCanvasSizeForOriginalResolution();
                 
                 const width = canvas.width;
                 const height = canvas.height;
@@ -2449,7 +2733,7 @@
                 const cols = appState.grid.horizontal;
                 const rows = appState.grid.vertical;
                 
-                // Get sticker size from canvas dimensions
+                // Get sticker size from canvas dimensions with original resolution support
                 const padding = 30;
                 const gap = 15;
                 const availableWidth = width - (padding * 2);
@@ -2467,7 +2751,7 @@
                 const startX = (width - totalWidth) / 2;
                 const startY = (height - totalHeight) / 2;
                 
-                // Draw each sticker in the grid
+                // Draw each sticker in the grid with original resolution support
                 for (let row = 0; row < rows; row++) {
                     for (let col = 0; col < cols; col++) {
                         const stickerX = startX + col * (stickerSize + gap);
@@ -2496,18 +2780,21 @@
                         ctx.shadowOffsetX = 2;
                         ctx.shadowOffsetY = 2;
                         
-                        // Calculate image size for this sticker
+                        // Calculate image size with ORIGINAL RESOLUTION SUPPORT
                         const imgW = appState.originalImage.width;
                         const imgH = appState.originalImage.height;
-                        const maxImgSize = stickerSize * 0.7; // Logo takes up 70% of sticker
                         
+                        // For original resolution, use the full image size or scale to fit sticker
+                        const maxImgSize = stickerSize * 0.8; // Use 80% of sticker size for original resolution
                         const imgScale = Math.min(maxImgSize / imgW, maxImgSize / imgH);
+                        
+                        // Use original resolution dimensions for the final display
                         const drawW = imgW * imgScale;
                         const drawH = imgH * imgScale;
                         const imgX = centerX - drawW / 2;
                         const imgY = centerY - drawH / 2;
                         
-                        // Draw image on temp canvas
+                        // Draw image on temp canvas at original resolution
                         tempCtx.drawImage(appState.originalImage, imgX - stickerX, imgY - stickerY, drawW, drawH);
                         
                         if (outlineWidth > 0) {
@@ -2592,7 +2879,7 @@
                             ctx.putImageData(resultData, stickerX, stickerY);
                         }
                         
-                        // Reset shadow and draw the image on top
+                        // Reset shadow and draw the image on top at original resolution
                         ctx.shadowColor = 'transparent';
                         ctx.drawImage(appState.originalImage, imgX, imgY, drawW, drawH);
                         
@@ -2604,82 +2891,252 @@
                 totalStickersValue.textContent = cols * rows;
             }
             
-            // Generate sticker sheet for download - exact preview copy
+            // Canvas sizing function with original resolution support
+            function updateCanvasSizeForOriginalResolution() {
+                const cols = appState.grid.horizontal;
+                const rows = appState.grid.vertical;
+                
+                // Base sticker size adjusted for original resolution display
+                const baseStickerSize = 120; // Increased from 60 to show more detail
+                const gap = 15; // pixels between stickers
+                const padding = 30; // padding around the grid
+                
+                // Calculate total dimensions
+                const totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
+                const totalHeight = rows * baseStickerSize + (rows - 1) * gap + padding * 2;
+                
+                // Set canvas size
+                canvas.width = totalWidth;
+                canvas.height = totalHeight;
+                
+                // Update container sizes to fit content
+                previewBoard.style.width = totalWidth + 'px';
+                previewBoard.style.height = totalHeight + 'px';
+                canvasContainer.style.width = totalWidth + 'px';
+                canvasContainer.style.height = totalHeight + 'px';
+                
+                // Add smooth transition
+                previewBoard.style.transition = 'width 0.3s ease, height 0.3s ease';
+                canvasContainer.style.transition = 'width 0.3s ease, height 0.3s ease';
+            }
+            
+            // Generate sticker sheet for download with original resolution support
             function generateStickerSheet() {
                 try {
-                    showNotification('Generating Sticker Sheet', 'Creating high-quality sticker sheet for download', 'info');
+                    showNotification('Generating Sticker Sheet', 'Creating high-quality transparent sticker sheet with original resolution', 'info');
                     
-                    // First, capture the current preview canvas content
-                    // Create a high-resolution version by scaling up the current canvas
-                    const previewCanvas = canvas;
-                    const previewCtx = previewCanvas.getContext('2d');
-                    
-                    // Calculate scale factor for high resolution (300 DPI)
-                    const dpi = 300;
-                    const previewWidth = previewCanvas.width;
-                    const previewHeight = previewCanvas.height;
-                    
-                    // Create high-resolution canvas
+                    // Create high-resolution canvas using original resolution drawing
                     const sheetCanvas = document.createElement('canvas');
                     const sheetCtx = sheetCanvas.getContext('2d');
                     
-                    // Set canvas size - scale up proportionally
-                    const scaleFactor = 4; // 4x resolution for print quality
-                    sheetCanvas.width = previewWidth * scaleFactor;
-                    sheetCanvas.height = previewHeight * scaleFactor;
+                    // Calculate dimensions for high-resolution output
+                    const cols = appState.grid.horizontal;
+                    const rows = appState.grid.vertical;
+                    const outlineWidth = appState.outlineEnabled ? appState.outline.width : 0;
+                    const outlineColor = appState.outline.color;
+                    const smooth = appState.outline.smoothing;
+                    
+                    // High resolution base dimensions (6x scale for print quality)
+                    const baseStickerSize = 120 * 6; // 720px per sticker at 300 DPI
+                    const gap = 15 * 6; // 90px gap
+                    const padding = 30 * 6; // 180px padding
+                    
+                    // Calculate total dimensions
+                    const totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
+                    const totalHeight = rows * baseStickerSize + (rows - 1) * gap + padding * 2;
+                    
+                    // Set canvas size for original resolution output
+                    sheetCanvas.width = totalWidth;
+                    sheetCanvas.height = totalHeight;
                     
                     // Set high-quality scaling
                     sheetCtx.imageSmoothingEnabled = true;
                     sheetCtx.imageSmoothingQuality = 'high';
                     
-                    // Fill background with white (card background)
-                    sheetCtx.fillStyle = '#ffffff';
-                    sheetCtx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
+                    // DO NOT fill background - keep it transparent for clean sticker sheets
+                    // sheetCtx.fillStyle = 'transparent';
+                    // sheetCtx.fillRect(0, 0, totalWidth, totalHeight);
                     
-                    // Copy the exact preview content scaled up
-                    sheetCtx.drawImage(previewCanvas, 0, 0, previewWidth, previewHeight, 0, 0, sheetCanvas.width, sheetCanvas.height);
+                    // Calculate sticker size based on available space
+                    const availableWidth = totalWidth - (padding * 2);
+                    const availableHeight = totalHeight - (padding * 2);
+                    const stickerSize = Math.min(
+                        (availableWidth - (cols - 1) * gap) / cols,
+                        (availableHeight - (rows - 1) * gap) / rows
+                    );
                     
-                    // Add subtle border to match preview card style
-                    sheetCtx.strokeStyle = '#e2e8f0';
-                    sheetCtx.lineWidth = 2 * scaleFactor;
-                    sheetCtx.strokeRect(0, 0, sheetCanvas.width, sheetCanvas.height);
+                    // Calculate starting position to center the grid
+                    const startX = (totalWidth - (cols * stickerSize + (cols - 1) * gap)) / 2;
+                    const startY = (totalHeight - (rows * stickerSize + (rows - 1) * gap)) / 2;
                     
-                    // Add a subtle shadow effect around the edges
-                    sheetCtx.shadowColor = 'rgba(0, 0, 0, 0.1)';
-                    sheetCtx.shadowBlur = 10 * scaleFactor;
-                    sheetCtx.shadowOffsetX = 0;
-                    sheetCtx.shadowOffsetY = 5 * scaleFactor;
+                    // Draw each sticker in the grid with original resolution
+                    for (let row = 0; row < rows; row++) {
+                        for (let col = 0; col < cols; col++) {
+                            const stickerX = startX + col * (stickerSize + gap);
+                            const stickerY = startY + row * (stickerSize + gap);
+                            const centerX = stickerX + stickerSize / 2;
+                            const centerY = stickerY + stickerSize / 2;
+                            
+                            // Create temporary canvas for this sticker at original resolution
+                            const tempCanvas = document.createElement('canvas');
+                            tempCanvas.width = stickerSize;
+                            tempCanvas.height = stickerSize;
+                            const tempCtx = tempCanvas.getContext('2d');
+                            
+                            // Clear temp canvas (transparent)
+                            tempCtx.clearRect(0, 0, stickerSize, stickerSize);
+                            
+                            // Draw sticker background circle with transparent center
+                            sheetCtx.beginPath();
+                            sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
+                            sheetCtx.fillStyle = '#ffffff';
+                            sheetCtx.fill();
+                            
+                            // Add subtle shadow for depth
+                            sheetCtx.shadowColor = 'rgba(0, 0, 0, 0.1)';
+                            sheetCtx.shadowBlur = 4 * 6; // Scale shadow for high resolution
+                            sheetCtx.shadowOffsetX = 2 * 6;
+                            sheetCtx.shadowOffsetY = 2 * 6;
+                            
+                            // Calculate image size for ORIGINAL RESOLUTION
+                            const imgW = appState.originalImage.width;
+                            const imgH = appState.originalImage.height;
+                            
+                            // Use original resolution with appropriate scaling for print
+                            const maxImgSize = stickerSize * 0.8; // Use 80% of sticker size
+                            const imgScale = Math.min(maxImgSize / imgW, maxImgSize / imgH);
+                            
+                            // Apply original resolution with proper scaling
+                            const drawW = imgW * imgScale;
+                            const drawH = imgH * imgScale;
+                            const imgX = centerX - drawW / 2;
+                            const imgY = centerY - drawH / 2;
+                            
+                            // Draw image on temp canvas at original resolution
+                            tempCtx.drawImage(appState.originalImage, imgX - stickerX, imgY - stickerY, drawW, drawH);
+                            
+                            if (outlineWidth > 0) {
+                                // Generate Outline using distance transform algorithm for this sticker
+                                const imageData = tempCtx.getImageData(0, 0, stickerSize, stickerSize);
+                                const data = imageData.data;
+                                
+                                // Create a mask: 0 for empty, 1 for object
+                                const distMap = new Float32Array(stickerSize * stickerSize);
+                                const INF = 1e9;
+                                
+                                // Initialize Distance Map
+                                for (let i = 0; i < stickerSize * stickerSize; i++) {
+                                    // Check alpha channel (every 4th byte)
+                                    if (data[i * 4 + 3] > 10) { // Threshold for "opaque"
+                                        distMap[i] = 0;
+                                    } else {
+                                        distMap[i] = INF;
+                                    }
+                                }
+                                
+                                // Fast Euclidean Distance Transform (EDT) - Two-pass algorithm
+                                // Pass 1: Top-Left to Bottom-Right
+                                for (let y = 0; y < stickerSize; y++) {
+                                    for (let x = 0; x < stickerSize; x++) {
+                                        const idx = y * stickerSize + x;
+                                        if (distMap[idx] === 0) continue;
+                                        
+                                        let min = distMap[idx];
+                                        // Check neighbors: Left, Top-Left, Top, Top-Right
+                                        if (x > 0) min = Math.min(min, distMap[idx - 1] + 1); // Left
+                                        if (y > 0) {
+                                            min = Math.min(min, distMap[idx - stickerSize] + 1); // Top
+                                            if (x > 0) min = Math.min(min, distMap[idx - stickerSize - 1] + 1.414); // Top-Left
+                                            if (x < stickerSize - 1) min = Math.min(min, distMap[idx - stickerSize + 1] + 1.414); // Top-Right
+                                        }
+                                        distMap[idx] = min;
+                                    }
+                                }
+                                
+                                // Pass 2: Bottom-Right to Top-Left
+                                for (let y = stickerSize - 1; y >= 0; y--) {
+                                    for (let x = stickerSize - 1; x >= 0; x--) {
+                                        const idx = y * stickerSize + x;
+                                        if (distMap[idx] === 0) continue;
+                                        
+                                        let min = distMap[idx];
+                                        // Check neighbors: Right, Bottom-Right, Bottom, Bottom-Left
+                                        if (x < stickerSize - 1) min = Math.min(min, distMap[idx + 1] + 1); // Right
+                                        if (y < stickerSize - 1) {
+                                            min = Math.min(min, distMap[idx + stickerSize] + 1); // Bottom
+                                            if (x < stickerSize - 1) min = Math.min(min, distMap[idx + stickerSize + 1] + 1.414); // Bottom-Right
+                                            if (x > 0) min = Math.min(min, distMap[idx + stickerSize - 1] + 1.414); // Bottom-Left
+                                        }
+                                        distMap[idx] = min;
+                                    }
+                                }
+                                
+                                // Draw the outline based on distance
+                                const [r, g, b] = hexToRgb(outlineColor);
+                                const resultData = sheetCtx.createImageData(stickerSize, stickerSize);
+                                const res = resultData.data;
+                                
+                                for (let i = 0; i < stickerSize * stickerSize; i++) {
+                                    const dist = distMap[i];
+                                    if (dist <= outlineWidth * 6) { // Scale outline width for high resolution
+                                        // Inside the outline zone
+                                        let alpha = 255;
+                                        if (smooth && dist > (outlineWidth * 6) - 1) {
+                                            // Fade out at the edge
+                                            alpha = 255 * (1 - (dist - ((outlineWidth * 6) - 1)));
+                                        }
+                                        
+                                        res[i * 4] = r;
+                                        res[i * 4 + 1] = g;
+                                        res[i * 4 + 2] = b;
+                                        res[i * 4 + 3] = alpha;
+                                    }
+                                }
+                                
+                                // Put the outline on the main canvas
+                                sheetCtx.putImageData(resultData, stickerX, stickerY);
+                            }
+                            
+                            // Reset shadow and draw the image on top at original resolution
+                            sheetCtx.shadowColor = 'transparent';
+                            sheetCtx.drawImage(appState.originalImage, imgX, imgY, drawW, drawH);
+                        }
+                    }
                     
-                    // Add a drop shadow around the entire card
-                    sheetCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-                    sheetCtx.lineWidth = 1 * scaleFactor;
-                    sheetCtx.strokeRect(-5 * scaleFactor, -5 * scaleFactor, sheetCanvas.width + 10 * scaleFactor, sheetCanvas.height + 10 * scaleFactor);
+                    // Add subtle border only for reference (optional - can be removed for pure transparency)
+                    // sheetCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+                    // sheetCtx.lineWidth = 1 * 6;
+                    // sheetCtx.strokeRect(0, 0, totalWidth, totalHeight);
                     
-                    // Reset shadow
-                    sheetCtx.shadowColor = 'transparent';
-                    
-                    // Add text information at the bottom (scaled up)
-                    sheetCtx.fillStyle = '#666666';
-                    sheetCtx.font = `${12 * scaleFactor}px Inter, sans-serif`;
-                    sheetCtx.textAlign = 'center';
-                    const cols = appState.grid.horizontal;
-                    const rows = appState.grid.vertical;
-                    const infoText = `Board: ${appState.boardSize.width}×${appState.boardSize.height}cm | Stickers: ${cols}×${rows} | Diameter: ${appState.stickerDiameter}cm`;
-                    sheetCtx.fillText(infoText, sheetCanvas.width / 2, sheetCanvas.height - 20 * scaleFactor);
+                    // Add text information at the bottom (only if there's space)
+                    // Only add text if the canvas is large enough
+                    if (totalHeight > 100) {
+                        sheetCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                        sheetCtx.font = `12px Inter, sans-serif`;
+                        sheetCtx.textAlign = 'center';
+                        const infoText = `Board: ${appState.boardSize.width}×${appState.boardSize.height}cm | Stickers: ${cols}×${rows} | Diameter: ${appState.stickerDiameter}cm | Original Resolution`;
+                        sheetCtx.fillText(infoText, totalWidth / 2, totalHeight - 20);
+                        
+                        // Add branding
+                        sheetCtx.fillStyle = 'rgba(37, 99, 235, 0.7)';
+                        sheetCtx.font = `10px Inter, sans-serif`;
+                        sheetCtx.textAlign = 'left';
+                        sheetCtx.fillText('Premium Sticker Customizer', 20, totalHeight - 40);
+                    }
                     
                     // Convert canvas to blob and download
                     sheetCanvas.toBlob(function(blob) {
                         const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = url;
-                        a.download = `sticker-preview-${appState.boardSize.width}x${appState.boardSize.height}cm-${cols}x${rows}-highres.png`;
+                        a.download = `sticker-sheet-transparent-original-resolution-${appState.boardSize.width}x${appState.boardSize.height}cm-${cols}x${rows}.png`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
                         URL.revokeObjectURL(url);
                         
                         setTimeout(() => {
-                            showNotification('Download Complete', 'Your high-resolution sticker preview has been downloaded', 'success');
+                            showNotification('Download Complete', 'Your transparent original resolution sticker sheet has been downloaded', 'success');
                         }, 500);
                     }, 'image/png', 1.0);
                     
