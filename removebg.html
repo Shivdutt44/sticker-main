@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -949,27 +950,8 @@
             position: relative;
             overflow: auto;
             min-height: 250px;
-            /* Mobile-specific optimizations */
-            max-height: 60vh; /* Prevent excessive height on mobile */
-        }
-        
-        /* Mobile-specific container adjustments */
-        @media (max-width: 575px) {
-            .preview-board-container {
-                padding: 0.5rem;
-                min-height: 200px;
-                max-height: 50vh; /* Further limit height on smaller screens */
-                overflow-x: auto; /* Enable horizontal scroll if needed */
-                overflow-y: hidden;
-            }
-        }
-        
-        @media (max-width: 375px) {
-            .preview-board-container {
-                padding: 0.375rem;
-                min-height: 180px;
-                max-height: 45vh;
-            }
+            width: 100%;
+            max-width: 100%;
         }
         
         .preview-board {
@@ -982,17 +964,6 @@
             align-items: center;
             justify-content: center;
             transition: var(--transition);
-            /* Mobile-specific constraints */
-            max-width: 100%;
-            max-height: 100%;
-        }
-        
-        /* Ensure board fits in container on mobile */
-        @media (max-width: 575px) {
-            .preview-board {
-                max-width: calc(100vw - 100px);
-                max-height: calc(50vh - 40px);
-            }
         }
         
         .preview-board-label {
@@ -1221,6 +1192,11 @@
             .controls-panel {
                 width: 400px;
             }
+            
+            .preview-board-container {
+                width: 100%;
+                max-width: 100%;
+            }
         }
         
         /* Standard Desktop (1200px - 1399px) */
@@ -1231,6 +1207,11 @@
             
             .controls-panel {
                 width: 380px;
+            }
+            
+            .preview-board-container {
+                width: 100%;
+                max-width: 100%;
             }
         }
         
@@ -1248,6 +1229,8 @@
             }
             
             .preview-board-container {
+                width: 100%;
+                max-width: 100%;
                 padding: 0.75rem;
             }
         }
@@ -1281,6 +1264,11 @@
             .preview-specs {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 0.5rem;
+            }
+            
+            .preview-board-container {
+                padding: 0.75rem;
+                min-height: 220px;
             }
             
             .size-controls {
@@ -1357,6 +1345,8 @@
             }
             
             .preview-board-container {
+                width: 100%;
+                max-width: 100%;
                 min-height: 220px;
                 padding: 0.75rem;
             }
@@ -1475,6 +1465,8 @@
             }
             
             .preview-board-container {
+                width: 100%;
+                max-width: 100%;
                 padding: 0.5rem;
                 min-height: 200px;
             }
@@ -1724,6 +1716,8 @@
             }
             
             .preview-board-container {
+                width: 100%;
+                max-width: 100%;
                 padding: 0.375rem;
                 min-height: 180px;
             }
@@ -1813,39 +1807,6 @@
             .slider::-webkit-slider-thumb {
                 width: 24px;
                 height: 24px;
-            }
-            
-            /* Mobile-specific sticker optimizations */
-            .preview-board {
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-            
-            /* Prevent zoom on input focus for mobile */
-            input[type="number"], input[type="text"], select {
-                font-size: 16px;
-            }
-        }
-        
-        /* Landscape mobile optimizations */
-        @media (max-width: 575px) and (orientation: landscape) {
-            .preview-board-container {
-                max-height: 70vh;
-                padding: 0.5rem;
-            }
-            
-            .preview-board {
-                max-height: 65vh;
-            }
-        }
-        
-        /* Portrait mobile optimizations */
-        @media (max-width: 575px) and (orientation: portrait) {
-            .preview-board-container {
-                max-height: 50vh;
-            }
-            
-            .preview-board {
-                max-height: 45vh;
             }
         }
         
@@ -1986,7 +1947,7 @@
                             Size Settings
                             <div class="help-tooltip">
                                 <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Select your board size and sticker diameter. Layout will automatically optimize for perfect fit. On mobile, stickers auto-resize to fit the screen.</span>
+                                <span class="tooltip-text">Select your board size and sticker diameter. Layout will automatically optimize for perfect fit.</span>
                             </div>
                         </div>
                         
@@ -2335,9 +2296,6 @@
                 
                 // Auto-optimize layout based on current settings
                 autoOptimizeLayout();
-                
-                // Mobile auto-resize optimization
-                optimizeForMobile();
                 
                 // Update size display
                 updateSizeDisplay();
@@ -2841,7 +2799,6 @@
                 updateSizeDisplay();
                 updateSpaceUsed();
                 autoOptimizeLayout(); // Automatically optimize layout for new board size
-                optimizeForMobile(); // Apply mobile optimization
             });
             
             diameterDecrease.addEventListener('click', function() {
@@ -2853,7 +2810,6 @@
                     updateSizeDisplay();
                     updateSpaceUsed();
                     autoOptimizeLayout(); // Automatically optimize layout for new diameter
-                    optimizeForMobile(); // Apply mobile optimization
                 }
             });
             
@@ -2866,7 +2822,6 @@
                     updateSizeDisplay();
                     updateSpaceUsed();
                     autoOptimizeLayout(); // Automatically optimize layout for new diameter
-                    optimizeForMobile(); // Apply mobile optimization
                 }
             });
             
@@ -2883,7 +2838,6 @@
                     updateSizeDisplay();
                     updateSpaceUsed();
                     autoOptimizeLayout(); // Automatically optimize layout for new diameter
-                    optimizeForMobile(); // Apply mobile optimization
                 }, 300); // 300ms debounce
             });
             
@@ -3049,71 +3003,15 @@
             // Layout is size or diameter changes
             // No manual grid controls needed with the new auto automatically optimized when board removed - using auto-fit system
             
-            // Detect if current view is mobile
-            function isMobileView() {
-                return window.innerWidth <= 575;
-            }
-            
-            // Get available container size for sticker display
-            function getAvailableContainerSize() {
-                const container = document.querySelector('.preview-board-container');
-                const containerRect = container.getBoundingClientRect();
-                
-                // Calculate available space with padding considerations
-                const maxWidth = containerRect.width - 40; // 20px padding on each side
-                const maxHeight = containerRect.height - 40; // 20px padding on top/bottom
-                
-                return {
-                    width: Math.max(200, maxWidth), // Minimum 200px width
-                    height: Math.max(150, maxHeight) // Minimum 150px height
-                };
-            }
-            
-            // Calculate optimal sticker size for mobile
-            function calculateOptimalStickerSize() {
-                const cols = appState.grid.horizontal;
-                const rows = appState.grid.vertical;
-                const containerSize = getAvailableContainerSize();
-                
-                // Base dimensions
-                const gap = 8; // Reduced gap for mobile
-                const padding = 15; // Reduced padding for mobile
-                
-                // Calculate maximum sticker size that fits in container
-                const availableWidth = containerSize.width - padding * 2;
-                const availableHeight = containerSize.height - padding * 2;
-                
-                const maxStickerWidth = (availableWidth - (cols - 1) * gap) / cols;
-                const maxStickerHeight = (availableHeight - (rows - 1) * gap) / rows;
-                
-                // Use the smaller dimension to ensure fit
-                let optimalSize = Math.min(maxStickerWidth, maxStickerHeight);
-                
-                // Set minimum and maximum constraints
-                optimalSize = Math.max(40, Math.min(optimalSize, 80)); // Between 40px and 80px
-                
-                // If mobile, further reduce size for better fit
-                if (isMobileView()) {
-                    optimalSize = Math.min(optimalSize, 60);
-                }
-                
-                return {
-                    size: Math.floor(optimalSize),
-                    gap: gap,
-                    padding: padding
-                };
-            }
-            
-            // Dynamic canvas sizing based on grid layout with mobile optimization
+            // Dynamic canvas sizing based on grid layout
             function updateCanvasSize() {
                 const cols = appState.grid.horizontal;
                 const rows = appState.grid.vertical;
                 
-                // Get optimal dimensions for current screen size
-                const dimensions = calculateOptimalStickerSize();
-                const baseStickerSize = dimensions.size;
-                const gap = dimensions.gap;
-                const padding = dimensions.padding;
+                // Base sticker size (will be adjusted for readability)
+                const baseStickerSize = 60; // pixels
+                const gap = 15; // pixels between stickers
+                const padding = 30; // padding around the grid
                 
                 // Calculate total dimensions
                 const totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
@@ -3123,14 +3021,13 @@
                 canvas.width = totalWidth;
                 canvas.height = totalHeight;
                 
-                // Update container sizes to fit content
-                previewBoard.style.width = totalWidth + 'px';
+                // Update container sizes to fit content while maintaining full width
                 previewBoard.style.height = totalHeight + 'px';
                 canvasContainer.style.width = totalWidth + 'px';
                 canvasContainer.style.height = totalHeight + 'px';
                 
                 // Add smooth transition
-                previewBoard.style.transition = 'width 0.3s ease, height 0.3s ease';
+                previewBoard.style.transition = 'height 0.3s ease';
                 canvasContainer.style.transition = 'width 0.3s ease, height 0.3s ease';
             }
             
@@ -3317,16 +3214,15 @@
                 totalStickersValue.textContent = cols * rows;
             }
             
-            // Canvas sizing function with original resolution support and mobile optimization
+            // Canvas sizing function with original resolution support and size limits
             function updateCanvasSizeForOriginalResolution() {
                 const cols = appState.grid.horizontal;
                 const rows = appState.grid.vertical;
                 
-                // Get optimal dimensions for current screen size
-                const dimensions = calculateOptimalStickerSize();
-                const baseStickerSize = dimensions.size;
-                const gap = dimensions.gap;
-                const padding = dimensions.padding;
+                // Base sticker size adjusted for original resolution display
+                const baseStickerSize = 120; // Increased from 60 to show more detail
+                const gap = 15; // pixels between stickers
+                const padding = 30; // padding around the grid
                 
                 // Calculate total dimensions
                 const totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
@@ -3347,14 +3243,13 @@
                     showNotification('Performance Notice', 'Canvas size limited for optimal performance', 'info');
                 }
                 
-                // Update container sizes to fit content
-                previewBoard.style.width = safeWidth + 'px';
+                // Update container sizes to fit content while maintaining full width
                 previewBoard.style.height = safeHeight + 'px';
                 canvasContainer.style.width = safeWidth + 'px';
                 canvasContainer.style.height = safeHeight + 'px';
                 
                 // Add smooth transition
-                previewBoard.style.transition = 'width 0.3s ease, height 0.3s ease';
+                previewBoard.style.transition = 'height 0.3s ease';
                 canvasContainer.style.transition = 'width 0.3s ease, height 0.3s ease';
             }
             
@@ -3584,24 +3479,6 @@
                 }
             }
             
-            // Mobile-specific optimization function
-            function optimizeForMobile() {
-                if (isMobileView()) {
-                    console.log('Applying mobile optimizations');
-                    
-                    // Recalculate canvas size for mobile
-                    updateCanvasSizeForOriginalResolution();
-                    
-                    // Force redraw with mobile-optimized sizing
-                    draw();
-                    
-                    // Track mobile state
-                    window.wasMobileView = true;
-                } else {
-                    window.wasMobileView = false;
-                }
-            }
-            
             // Convert hex color to RGB
             function hexToRgb(hex) {
                 const bigint = parseInt(hex.slice(1), 16);
@@ -3611,34 +3488,13 @@
                 return [r, g, b];
             }
             
-            // Handle window resize with mobile auto-resize
+            // Handle window resize
             window.addEventListener('resize', function() {
                 // Debounce resize events
                 clearTimeout(window.resizeTimer);
                 window.resizeTimer = setTimeout(function() {
-                    // Check if we need to auto-resize for mobile
-                    const wasMobile = window.wasMobileView || false;
-                    const isNowMobile = isMobileView();
-                    
-                    // If mobile state changed or on mobile, trigger auto-resize
-                    if (wasMobile !== isNowMobile || isNowMobile) {
-                        console.log('Mobile view changed or mobile detected, auto-resizing stickers');
-                        
-                        // Force re-calculation of optimal sticker size
-                        updateCanvasSizeForOriginalResolution();
-                        draw();
-                        
-                        // Show notification for mobile optimization
-                        if (isNowMobile) {
-                            showNotification('Mobile Optimized', 'Stickers automatically resized for mobile view', 'info');
-                        }
-                    } else {
-                        // Regular desktop resize
-                        draw();
-                    }
-                    
-                    // Update mobile state tracking
-                    window.wasMobileView = isNowMobile;
+                    // Adjust canvas size if needed
+                    draw();
                 }, 250);
             });
             
