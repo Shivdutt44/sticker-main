@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Sticker Customizer - Shopify</title>
+    <title>Custom Sticker Modal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -40,75 +40,117 @@
             line-height: 1.6;
             overflow-x: hidden;
             min-height: 100vh;
-        }
-        
-        /* Header */
-        .app-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 1rem;
-            box-shadow: var(--shadow-md);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        
-        .app-header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .app-logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            justify-content: center;
         }
         
-        .app-logo i {
-            font-size: 1.5rem;
-        }
-        
-        .app-logo h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .app-actions {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .app-action-btn {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Main Button Styling */
+        .main-button {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
             color: white;
-            padding: 0.5rem 1rem;
+            border: none;
             border-radius: 0.5rem;
-            font-weight: 500;
+            font-size: 1.125rem;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            box-shadow: var(--shadow-md);
         }
         
-        .app-action-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
+        .main-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         
-        .mobile-menu-toggle {
-            display: none;
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Modal Container */
+        .modal-container {
+            width: 95%;
+            max-width: 1400px;
+            height: 90vh;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        
+        /* Modal Header */
+        .modal-header {
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
             background: none;
             border: none;
             color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 0.5rem;
+            transition: var(--transition);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
+        .modal-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Modal Body */
+        .modal-body {
+            flex: 1;
+            overflow: auto;
+            padding: 0;
+        }
+        
+        /* All the original styles from the modal_data */
         /* Progress Indicator */
         .progress-indicator {
             display: flex;
@@ -196,7 +238,7 @@
             display: grid;
             grid-template-columns: 350px 1fr;
             gap: 1rem;
-            min-height: calc(100vh - 180px);
+            min-height: calc(100vh - 80px);
         }
         
         /* Controls Panel */
@@ -208,8 +250,8 @@
             display: flex;
             flex-direction: column;
             position: sticky;
-            top: calc(100px + 4rem);
-            height: calc(100vh - 180px);
+            top: 1rem;
+            height: calc(100vh - 80px);
         }
         
         .controls-tabs {
@@ -646,7 +688,6 @@
             font-size: 0.875rem;
         }
         
-
         .checkbox-control {
             display: flex;
             align-items: center;
@@ -1191,20 +1232,8 @@
             
             .controls-panel {
                 width: 280px;
-                height: calc(100vh - 140px);
-                top: calc(100px + 2.5rem);
-            }
-            
-            .app-header-content {
-                padding: 0 0.75rem;
-            }
-            
-            .app-logo h1 {
-                font-size: 1.25rem;
-            }
-            
-            .app-actions {
-                gap: 0.75rem;
+                height: calc(100vh - 60px);
+                top: 0.5rem;
             }
             
             .preview-specs {
@@ -1385,16 +1414,12 @@
         /* Height-based adjustments for desktop */
         @media (min-width: 1024px) and (max-height: 800px) {
             .controls-panel {
-                height: calc(100vh - 140px);
-                top: calc(100px + 2rem);
+                height: calc(100vh - 60px);
+                top: 0.5rem;
             }
             
             .controls-content {
-                max-height: calc(100vh - 220px);
-            }
-            
-            .app-header {
-                padding: 0.75rem 1rem;
+                max-height: calc(100vh - 100px);
             }
             
             .progress-indicator {
@@ -1404,23 +1429,23 @@
         
         @media (min-width: 1024px) and (min-height: 801px) and (max-height: 1000px) {
             .controls-panel {
-                height: calc(100vh - 160px);
-                top: calc(100px + 3rem);
+                height: calc(100vh - 80px);
+                top: 1rem;
             }
             
             .controls-content {
-                max-height: calc(100vh - 240px);
+                max-height: calc(100vh - 120px);
             }
         }
         
         @media (min-width: 1024px) and (min-height: 1001px) {
             .controls-panel {
-                height: calc(100vh - 180px);
-                top: calc(100px + 4rem);
+                height: calc(100vh - 80px);
+                top: 1rem;
             }
             
             .controls-content {
-                max-height: calc(100vh - 280px);
+                max-height: calc(100vh - 120px);
             }
         }
         
@@ -1430,7 +1455,6 @@
                 padding: 1rem 0.5rem;
             }
             
-            .app-action-btn,
             .preview-action-btn,
             .confirmation-btn {
                 min-height: 44px;
@@ -1475,273 +1499,272 @@
     </style>
 </head>
 <body>
-    <!-- App Header -->
-    <header class="app-header">
-        <div class="app-header-content">
-            <div class="app-logo">
-                <i class="fas fa-tags"></i>
-                <h1>Sticker Customizer</h1>
-            </div>
-            <div class="app-actions">
-                <button class="app-action-btn" id="saveDesignBtn">
-                    <i class="fas fa-save"></i>
-                    <span>Save Design</span>
-                </button>
-                <button class="app-action-btn" id="shareDesignBtn">
-                    <i class="fas fa-share-alt"></i>
-                    <span>Share</span>
+    <!-- Main Button -->
+    <button class="main-button" id="openModalBtn">
+        <i class="fas fa-sticker"></i>
+        Custom Sticker
+    </button>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Premium Sticker Customizer</h2>
+                <button class="modal-close" id="closeModalBtn">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
-        </div>
-    </header>
-    
-    <!-- Progress Indicator -->
-    <div class="progress-indicator">
-        <div class="progress-step active" id="step1">
-            <div class="progress-step-circle">
-                <i class="fas fa-image"></i>
-            </div>
-            <div class="progress-step-label">Logo</div>
-        </div>
-        <div class="progress-step" id="step2">
-            <div class="progress-step-circle">
-                <i class="fas fa-border-style"></i>
-            </div>
-            <div class="progress-step-label">Outline</div>
-        </div>
-        <div class="progress-step" id="step3">
-            <div class="progress-step-circle">
-                <i class="fas fa-th"></i>
-            </div>
-            <div class="progress-step-label">Layout</div>
-        </div>
-        <div class="progress-step" id="step4">
-            <div class="progress-step-circle">
-                <i class="fas fa-check"></i>
-            </div>
-            <div class="progress-step-label">Confirm</div>
-        </div>
-    </div>
-    
-    <!-- Main App Container -->
-    <div class="app-container">
-        <!-- Controls Panel (FIRST on mobile, Left on desktop) -->
-        <aside class="controls-panel" id="controlsPanel">
-            <div class="controls-tabs">
-                <div class="controls-tab active" data-tab="design">
-                    <i class="fas fa-palette"></i>
-                    <span>Design</span>
-                </div>
-            </div>
-            
-            <div class="controls-content">
-                <!-- Design Tab -->
-                <div class="tab-content" id="designTab">
-                    <!-- Logo Upload Section -->
-                    <div class="control-section" id="logoSection">
-                        <div class="control-section-title">
+            <div class="modal-body">
+                <!-- Progress Indicator -->
+                <div class="progress-indicator">
+                    <div class="progress-step active" id="step1">
+                        <div class="progress-step-circle">
                             <i class="fas fa-image"></i>
-                            Logo
-                            <div class="help-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Upload your logo in PNG or JPG format. Recommended size: 500x500px or larger for best quality. Use 'Remove BG' for automatic background removal.</span>
-                            </div>
                         </div>
-                        <div class="logo-upload-container" id="logoUploadContainer">
-                            <div class="logo-upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <div class="logo-upload-text">Upload Logo</div>
-                            <div class="logo-upload-subtext">Click to upload or drag and drop</div>
-                            <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
-                        </div>
-                        <div class="logo-preview" id="logoPreview">
-                            <img class="logo-preview-img" id="logoPreviewImg" src="" alt="Logo Preview">
-                            <div class="logo-preview-actions">
-                                <div class="logo-preview-name" id="logoPreviewName"></div>
-                                <div class="logo-preview-controls">
-                                    <button class="logo-remove-bg-btn" id="logoRemoveBgBtn" title="Remove Background">
-                                        <i class="fas fa-cut"></i>
-                                        <span>Remove BG</span>
-                                    </button>
-                                    <button class="logo-remove-btn" id="logoRemoveBtn">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="progress-step-label">Logo</div>
                     </div>
-                    
-                    <!-- Color Controls -->
-                    <div class="control-section" id="colorSection">
-                        <div class="control-section-title">
-                            <i class="fas fa-palette"></i>
-                            Colors
-                            <div class="help-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Choose outline colors for your stickers. Use the palette or enter a custom hex color.</span>
-                            </div>
-                        </div>
-                        
-                        <div class="color-control">
-                            <input type="color" class="color-picker" id="outlineColorPicker" value="#000000">
-                            <input type="text" class="color-input" id="outlineColorHex" value="#000000" maxlength="7">
-                        </div>
-                    </div>
-
-                    <!-- Size Controls -->
-                    <div class="control-section" id="sizeSection">
-                        <div class="control-section-title">
-                            <i class="fas fa-ruler-combined"></i>
-                            Size Settings
-                            <div class="help-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Select your board size and sticker diameter. Layout will automatically optimize for perfect fit.</span>
-                            </div>
-                        </div>
-                        
-                        <div class="size-controls">
-                            <div class="size-control">
-                                <div class="size-control-label">
-                                    <i class="fas fa-expand-arrows-alt"></i>
-                                    Board Size (cm)
-                                </div>
-                                <select class="size-control-input" id="boardSizeSelect">
-                                    <option value="10x15">10 × 15</option>
-                                    <option value="15x20">15 × 20</option>
-                                    <option value="20x30">20 × 30</option>
-                                    <option value="30x40">30 × 40</option>
-                                    <option value="40x50">40 × 50</option>
-                                    <option value="50x70">50 × 70</option>
-                                </select>
-                            </div>
-                            
-                            <div class="size-control">
-                                <div class="size-control-label">
-                                    <i class="fas fa-circle"></i>
-                                    Sticker Diameter (cm)
-                                </div>
-                                <div class="number-input-container">
-                                    <button class="number-input-btn" id="diameterDecrease">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                    <input type="number" class="number-input" id="diameterInput" value="5" min="1" max="20" step="0.5">
-                                    <button class="number-input-btn" id="diameterIncrease">
-                                        <i class="fas fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Outline Controls -->
-                    <div class="control-section" id="outlineSection">
-                        <div class="control-section-title">
+                    <div class="progress-step" id="step2">
+                        <div class="progress-step-circle">
                             <i class="fas fa-border-style"></i>
-                            Outline Settings
-                            <div class="help-tooltip">
-                                <i class="fas fa-question-circle"></i>
-                                <span class="tooltip-text">Configure outline width and smoothing for your stickers.</span>
+                        </div>
+                        <div class="progress-step-label">Outline</div>
+                    </div>
+                    <div class="progress-step" id="step3">
+                        <div class="progress-step-circle">
+                            <i class="fas fa-th"></i>
+                        </div>
+                        <div class="progress-step-label">Layout</div>
+                    </div>
+                    <div class="progress-step" id="step4">
+                        <div class="progress-step-circle">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="progress-step-label">Confirm</div>
+                    </div>
+                </div>
+                
+                <!-- Main App Container -->
+                <div class="app-container">
+                    <!-- Controls Panel (FIRST on mobile, Left on desktop) -->
+                    <aside class="controls-panel" id="controlsPanel">
+                        <div class="controls-tabs">
+                            <div class="controls-tab active" data-tab="design">
+                                <i class="fas fa-palette"></i>
+                                <span>Design</span>
                             </div>
                         </div>
                         
-                        <div class="outline-toggle-container">
-                            <div class="outline-toggle-label">Enable Outline</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="outlineToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
+                        <div class="controls-content">
+                            <!-- Design Tab -->
+                            <div class="tab-content" id="designTab">
+                                <!-- Logo Upload Section -->
+                                <div class="control-section" id="logoSection">
+                                    <div class="control-section-title">
+                                        <i class="fas fa-image"></i>
+                                        Logo
+                                        <div class="help-tooltip">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span class="tooltip-text">Upload your logo in PNG or JPG format. Recommended size: 500x500px or larger for best quality. Use 'Remove BG' for automatic background removal.</span>
+                                        </div>
+                                    </div>
+                                    <div class="logo-upload-container" id="logoUploadContainer">
+                                        <div class="logo-upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <div class="logo-upload-text">Upload Logo</div>
+                                        <div class="logo-upload-subtext">Click to upload or drag and drop</div>
+                                        <input type="file" id="logoFileInput" accept="image/*" style="display: none;">
+                                    </div>
+                                    <div class="logo-preview" id="logoPreview">
+                                        <img class="logo-preview-img" id="logoPreviewImg" src="" alt="Logo Preview">
+                                        <div class="logo-preview-actions">
+                                            <div class="logo-preview-name" id="logoPreviewName"></div>
+                                            <div class="logo-preview-controls">
+                                                <button class="logo-remove-bg-btn" id="logoRemoveBgBtn" title="Remove Background">
+                                                    <i class="fas fa-cut"></i>
+                                                    <span>Remove BG</span>
+                                                </button>
+                                                <button class="logo-remove-btn" id="logoRemoveBtn">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Color Controls -->
+                                <div class="control-section" id="colorSection">
+                                    <div class="control-section-title">
+                                        <i class="fas fa-palette"></i>
+                                        Colors
+                                        <div class="help-tooltip">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span class="tooltip-text">Choose outline colors for your stickers. Use the palette or enter a custom hex color.</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="color-control">
+                                        <input type="color" class="color-picker" id="outlineColorPicker" value="#000000">
+                                        <input type="text" class="color-input" id="outlineColorHex" value="#000000" maxlength="7">
+                                    </div>
+                                </div>
+
+                                <!-- Size Controls -->
+                                <div class="control-section" id="sizeSection">
+                                    <div class="control-section-title">
+                                        <i class="fas fa-ruler-combined"></i>
+                                        Size Settings
+                                        <div class="help-tooltip">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span class="tooltip-text">Select your board size and sticker diameter. Layout will automatically optimize for perfect fit.</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="size-controls">
+                                        <div class="size-control">
+                                            <div class="size-control-label">
+                                                <i class="fas fa-expand-arrows-alt"></i>
+                                                Board Size (cm)
+                                            </div>
+                                            <select class="size-control-input" id="boardSizeSelect">
+                                                <option value="10x15">10 × 15</option>
+                                                <option value="15x20">15 × 20</option>
+                                                <option value="20x30">20 × 30</option>
+                                                <option value="30x40">30 × 40</option>
+                                                <option value="40x50">40 × 50</option>
+                                                <option value="50x70">50 × 70</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="size-control">
+                                            <div class="size-control-label">
+                                                <i class="fas fa-circle"></i>
+                                                Sticker Diameter (cm)
+                                            </div>
+                                            <div class="number-input-container">
+                                                <button class="number-input-btn" id="diameterDecrease">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input type="number" class="number-input" id="diameterInput" value="5" min="1" max="20" step="0.5">
+                                                <button class="number-input-btn" id="diameterIncrease">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Outline Controls -->
+                                <div class="control-section" id="outlineSection">
+                                    <div class="control-section-title">
+                                        <i class="fas fa-border-style"></i>
+                                        Outline Settings
+                                        <div class="help-tooltip">
+                                            <i class="fas fa-question-circle"></i>
+                                            <span class="tooltip-text">Configure outline width and smoothing for your stickers.</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="outline-toggle-container">
+                                        <div class="outline-toggle-label">Enable Outline</div>
+                                        <label class="toggle-switch">
+                                            <input type="checkbox" id="outlineToggle" checked>
+                                            <span class="toggle-slider"></span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="outline-controls" id="outlineControls">
+                                        <div class="slider-control">
+                                            <div class="slider-label">
+                                                <span>Outline Width</span>
+                                                <span class="slider-value" id="outlineWidthValue">6px</span>
+                                            </div>
+                                            <input type="range" min="0" max="30" value="6" class="slider" id="outlineWidth">
+                                        </div>
+                                        
+                                        <div class="checkbox-control">
+                                            <input type="checkbox" id="smoothingToggle" checked>
+                                            <label class="checkbox-label" for="smoothingToggle">Enable Smooth Edges</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                    
+                    <!-- Preview Panel (SECOND on mobile, Right on desktop) -->
+                    <main class="preview-panel">
+                        <div class="preview-header">
+                            <h2 class="preview-title">Preview</h2>
+                            <div class="preview-actions">
+                                <button class="preview-action-btn" id="resetBtn">
+                                    <i class="fas fa-undo"></i>
+                                    <span>Reset</span>
+                                </button>
+                                <button class="preview-action-btn primary" id="downloadBtn">
+                                    <i class="fas fa-download"></i>
+                                    <span>Download</span>
+                                </button>
+                            </div>
                         </div>
                         
-                        <div class="outline-controls" id="outlineControls">
-                            <div class="slider-control">
-                                <div class="slider-label">
-                                    <span>Outline Width</span>
-                                    <span class="slider-value" id="outlineWidthValue">10px</span>
+                        <div class="preview-content">
+                            <div class="preview-board-container">
+                                <div class="preview-board" id="previewBoard">
+                                    <div class="preview-board-label" id="boardLabel">Board 10 × 15 cm</div>
+                                    <div class="canvas-container" id="canvasContainer">
+                                        <canvas id="stickerCanvas"></canvas>
+                                    </div>
                                 </div>
-                                <input type="range" min="0" max="30" value="10" class="slider" id="outlineWidth">
                             </div>
                             
-                            <div class="checkbox-control">
-                                <input type="checkbox" id="smoothingToggle" checked>
-                                <label class="checkbox-label" for="smoothingToggle">Enable Smooth Edges</label>
+                            <div class="preview-specs">
+                                <div class="preview-spec">
+                                    <div class="preview-spec-title">Board Size</div>
+                                    <div class="preview-spec-value" id="boardSizeValue">15 × 20 cm</div>
+                                </div>
+                                <div class="preview-spec">
+                                    <div class="preview-spec-title">Total Stickers</div>
+                                    <div class="preview-spec-value" id="totalStickersValue">4</div>
+                                </div>
+                                <div class="preview-spec">
+                                    <div class="preview-spec-title">Sticker Diameter</div>
+                                    <div class="preview-spec-value" id="stickerDiameterValue">5 cm</div>
+                                </div>
+                                <div class="preview-spec">
+                                    <div class="preview-spec-title">Space Used</div>
+                                    <div class="preview-spec-value" id="spaceUsedValue">75%</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-        
-        <!-- Preview Panel (SECOND on mobile, Right on desktop) -->
-        <main class="preview-panel">
-            <div class="preview-header">
-                <h2 class="preview-title">Preview</h2>
-                <div class="preview-actions">
-                    <button class="preview-action-btn" id="resetBtn">
-                        <i class="fas fa-undo"></i>
-                        <span>Reset</span>
-                    </button>
-                    <button class="preview-action-btn primary" id="downloadBtn">
-                        <i class="fas fa-download"></i>
-                        <span>Download</span>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="preview-content">
-                <div class="preview-board-container">
-                    <div class="preview-board" id="previewBoard">
-                        <div class="preview-board-label" id="boardLabel">Board 10 × 15 cm</div>
-                        <div class="canvas-container" id="canvasContainer">
-                            <canvas id="stickerCanvas"></canvas>
+                        
+                        <div class="confirmation-section">
+                            <h3 class="confirmation-title">Do these labels suit you?</h3>
+                            <p class="confirmation-text">Check preview and confirm if design meets your expectations.</p>
+                            
+                            <div class="confirmation-actions">
+                                <button class="confirmation-btn primary" id="confirmYesBtn">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Yes, it's perfect!</span>
+                                </button>
+                                <button class="confirmation-btn secondary" id="confirmHelpBtn">
+                                    <i class="fas fa-question-circle"></i>
+                                    <span>I need help</span>
+                                </button>
+                            </div>
+                            
+                            <div class="confirmation-message success" id="successMessage">
+                                <i class="fas fa-check"></i> Thank you! Your design has been confirmed and added to your cart.
+                            </div>
+                            
+                            <div class="confirmation-message help" id="helpMessage">
+                                <i class="fas fa-headset"></i> Our support team will contact you shortly to assist with your design.
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="preview-specs">
-                    <div class="preview-spec">
-                        <div class="preview-spec-title">Board Size</div>
-                        <div class="preview-spec-value" id="boardSizeValue">15 × 20 cm</div>
-                    </div>
-                    <div class="preview-spec">
-                        <div class="preview-spec-title">Total Stickers</div>
-                        <div class="preview-spec-value" id="totalStickersValue">4</div>
-                    </div>
-                    <div class="preview-spec">
-                        <div class="preview-spec-title">Sticker Diameter</div>
-                        <div class="preview-spec-value" id="stickerDiameterValue">5 cm</div>
-                    </div>
-                    <div class="preview-spec">
-                        <div class="preview-spec-title">Space Used</div>
-                        <div class="preview-spec-value" id="spaceUsedValue">75%</div>
-                    </div>
+                    </main>
                 </div>
             </div>
-            
-            <div class="confirmation-section">
-                <h3 class="confirmation-title">Do these labels suit you?</h3>
-                <p class="confirmation-text">Check preview and confirm if design meets your expectations.</p>
-                
-                <div class="confirmation-actions">
-                    <button class="confirmation-btn primary" id="confirmYesBtn">
-                        <i class="fas fa-check-circle"></i>
-                        <span>Yes, it's perfect!</span>
-                    </button>
-                    <button class="confirmation-btn secondary" id="confirmHelpBtn">
-                        <i class="fas fa-question-circle"></i>
-                        <span>I need help</span>
-                    </button>
-                </div>
-                
-                <div class="confirmation-message success" id="successMessage">
-                    <i class="fas fa-check"></i> Thank you! Your design has been confirmed and added to your cart.
-                </div>
-                
-                <div class="confirmation-message help" id="helpMessage">
-                    <i class="fas fa-headset"></i> Our support team will contact you shortly to assist with your design.
-                </div>
-            </div>
-        </main>
+        </div>
     </div>
     
     <!-- Notification Toast -->
@@ -1768,6 +1791,31 @@
         }
         
         document.addEventListener('DOMContentLoaded', function() {
+            // Modal Elements
+            const openModalBtn = document.getElementById('openModalBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            
+            // Open modal when button is clicked
+            openModalBtn.addEventListener('click', function() {
+                modalOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling of background
+            });
+            
+            // Close modal when close button is clicked
+            closeModalBtn.addEventListener('click', function() {
+                modalOverlay.classList.remove('active');
+                document.body.style.overflow = ''; // Restore scrolling
+            });
+            
+            // Close modal when clicking outside of modal content
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                    document.body.style.overflow = ''; // Restore scrolling
+                }
+            });
+            
             // DOM Elements
             const controlsPanel = document.getElementById('controlsPanel');
             
@@ -1823,8 +1871,6 @@
             // Action Buttons
             const resetBtn = document.getElementById('resetBtn');
             const downloadBtn = document.getElementById('downloadBtn');
-            const saveDesignBtn = document.getElementById('saveDesignBtn');
-            const shareDesignBtn = document.getElementById('shareDesignBtn');
             const confirmYesBtn = document.getElementById('confirmYesBtn');
             const confirmHelpBtn = document.getElementById('confirmHelpBtn');
             const successMessage = document.getElementById('successMessage');
@@ -1858,7 +1904,7 @@
                 stickerDiameter: 5, // in cm
                 outlineEnabled: true,
                 outline: {
-                    width: 10,
+                    width: 6,
                     color: '#000000',
                     smoothing: true
                 },
@@ -1919,8 +1965,8 @@
                 testRemoveBgApi();
                 
                 // Set initial values
-                outlineWidth.value = appState.outline.width;
-                outlineWidthValue.textContent = `${appState.outline.width}px`;
+                outlineWidth.value = 6;
+                outlineWidthValue.textContent = `6px`;
                 outlineToggle.checked = appState.outlineEnabled;
                 smoothingToggle.checked = appState.outline.smoothing;
                 boardSizeSelect.value = '15x20';
@@ -2543,7 +2589,7 @@
                 appState.boardSize = { width: 15, height: 20 };
                 appState.stickerDiameter = 5;
                 appState.outlineEnabled = true;
-                appState.outline.width = 10;
+                appState.outline.width = 6;
                 appState.outline.color = '#000000';
                 appState.outline.smoothing = true;
                 appState.grid.horizontal = 2;
@@ -2590,18 +2636,6 @@
             // Download button - generate sticker sheet
             downloadBtn.addEventListener('click', function() {
                 generateStickerSheet();
-            });
-            
-            // Save Design Button
-            saveDesignBtn.addEventListener('click', function() {
-                // In a real implementation, this would save the design to user account
-                showNotification('Design Saved', 'Your design has been saved to your account', 'success');
-            });
-            
-            // Share Design Button
-            shareDesignBtn.addEventListener('click', function() {
-                // In a real implementation, this would open share dialog
-                showNotification('Share Ready', 'Share options are now available', 'info');
             });
             
             confirmYesBtn.addEventListener('click', function() {
