@@ -150,86 +150,7 @@
             overflow: auto;
             padding: 0;
         }
-        
-        /* Progress Indicator */
-        #stc-wrapper .stc-progress-indicator {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            background: white;
-            box-shadow: var(--stc-shadow-sm);
-            margin-bottom: 1rem;
-            border-radius: 0.5rem;
-            max-width: 1400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        #stc-wrapper .stc-progress-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            flex: 1;
-        }
-        
-        #stc-wrapper .stc-progress-step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            top: 1rem;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background: var(--stc-border-color);
-            z-index: 0;
-        }
-        
-        #stc-wrapper .stc-progress-step.stc-active:not(:last-child)::after {
-            background: var(--stc-primary-color);
-        }
-        
-        #stc-wrapper .stc-progress-step-circle {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            background: white;
-            border: 2px solid var(--stc-border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 0.5rem;
-            z-index: 1;
-            transition: var(--stc-transition);
-        }
-        
-        #stc-wrapper .stc-progress-step.stc-active .stc-progress-step-circle {
-            background: var(--stc-primary-color);
-            border-color: var(--stc-primary-color);
-            color: white;
-        }
-        
-        #stc-wrapper .stc-progress-step.stc-completed .stc-progress-step-circle {
-            background: var(--stc-success-color);
-            border-color: var(--stc-success-color);
-            color: white;
-        }
-        
-        #stc-wrapper .stc-progress-step-label {
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--stc-light-text);
-            font-weight: 500;
-        }
-        
-        #stc-wrapper .stc-progress-step.stc-active .stc-progress-step-label {
-            color: var(--stc-primary-color);
-            font-weight: 600;
-        }
-        
-        #stc-wrapper .stc-progress-step.stc-completed .stc-progress-step-label {
-            color: var(--stc-success-color);
-        }
-        
+
         /* Main Container */
         #stc-wrapper .stc-app-container {
             max-width: 1400px;
@@ -1091,21 +1012,6 @@
             #stc-wrapper .stc-canvas-container {
                 overflow: visible;
             }
-            
-            #stc-wrapper .stc-progress-indicator {
-                margin-bottom: 0.75rem;
-                padding: 0.75rem;
-            }
-            
-            #stc-wrapper .stc-progress-step-circle {
-                width: 1.75rem;
-                height: 1.75rem;
-                font-size: 0.75rem;
-            }
-            
-            #stc-wrapper .stc-progress-step-label {
-                font-size: 0.7rem;
-            }
         }
         
         /* Enhanced Mobile - up to 575px */
@@ -1271,34 +1177,6 @@
                     </button>
                 </div>
                 <div class="stc-modal-body">
-                    <!-- Progress Indicator -->
-                    <div class="stc-progress-indicator">
-                        <div class="stc-progress-step stc-active" id="stc-step-1">
-                            <div class="stc-progress-step-circle">
-                                <i class="fas fa-image"></i>
-                            </div>
-                            <div class="stc-progress-step-label">Logo</div>
-                        </div>
-                        <div class="stc-progress-step" id="stc-step-2">
-                            <div class="stc-progress-step-circle">
-                                <i class="fas fa-border-style"></i>
-                            </div>
-                            <div class="stc-progress-step-label">Outline</div>
-                        </div>
-                        <div class="stc-progress-step" id="stc-step-3">
-                            <div class="stc-progress-step-circle">
-                                <i class="fas fa-th"></i>
-                            </div>
-                            <div class="stc-progress-step-label">Layout</div>
-                        </div>
-                        <div class="stc-progress-step" id="stc-step-4">
-                            <div class="stc-progress-step-circle">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="stc-progress-step-label">Confirm</div>
-                        </div>
-                    </div>
-                    
                     <!-- Main App Container -->
                     <div class="stc-app-container">
                         <!-- Controls Panel -->
@@ -1524,9 +1402,6 @@
                 outlineEnabled: true,
                 outline: { width: 6, color: '#000000', smoothing: true },
                 grid: { horizontal: 2, vertical: 2 },
-                hasLogo: false,
-                hasOutline: true,
-                hasLayout: false,
                 backgroundRemoved: false,
                 isProcessingBgRemoval: false
             };
@@ -1584,11 +1459,7 @@
                 notificationToast: document.getElementById('stc-notification-toast'),
                 notificationTitle: document.getElementById('stc-notification-title'),
                 notificationMessage: document.getElementById('stc-notification-message'),
-                notificationClose: document.getElementById('stc-notification-close'),
-                step1: document.getElementById('stc-step-1'),
-                step2: document.getElementById('stc-step-2'),
-                step3: document.getElementById('stc-step-3'),
-                step4: document.getElementById('stc-step-4')
+                notificationClose: document.getElementById('stc-notification-close')
             };
             
             const stcCtx = stcElements.canvas.getContext('2d');
@@ -1617,7 +1488,6 @@
                 stcAutoOptimizeLayout();
                 stcUpdateSizeDisplay();
                 stcUpdateSpaceUsed();
-                stcUpdateProgress();
                 stcDraw();
             }
             
@@ -1653,30 +1523,6 @@
                 }, 5000);
             }
             
-            // Update progress indicator
-            function stcUpdateProgress() {
-                stcElements.step1.classList.remove('stc-active', 'stc-completed');
-                stcElements.step2.classList.remove('stc-active', 'stc-completed');
-                stcElements.step3.classList.remove('stc-active', 'stc-completed');
-                stcElements.step4.classList.remove('stc-active', 'stc-completed');
-                
-                if (stcState.hasLogo) {
-                    stcElements.step1.classList.add('stc-completed');
-                    stcElements.step2.classList.add('stc-active');
-                    
-                    if (stcState.hasOutline) {
-                        stcElements.step2.classList.add('stc-completed');
-                        stcElements.step3.classList.add('stc-active');
-                        
-                        if (stcState.hasLayout) {
-                            stcElements.step3.classList.add('stc-completed');
-                            stcElements.step4.classList.add('stc-active');
-                        }
-                    }
-                } else {
-                    stcElements.step1.classList.add('stc-active');
-                }
-            }
             
             // Logo Upload with drag and drop
             stcElements.logoUploadContainer.addEventListener('click', function() {
@@ -1729,7 +1575,6 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         stcState.logoUrl = e.target.result;
-                        stcState.hasLogo = true;
                         stcState.backgroundRemoved = false;
                         stcState.isProcessingBgRemoval = false;
 
@@ -1757,13 +1602,11 @@
                                 upscaledImg.onload = function() {
                                     stcState.originalImage = upscaledImg;
                                     stcDraw();
-                                    stcUpdateProgress();
                                 };
                                 upscaledImg.src = upscaleCanvas.toDataURL('image/png');
                             } else {
                                 stcState.originalImage = img;
                                 stcDraw();
-                                stcUpdateProgress();
                             }
                         };
                         img.src = e.target.result;
@@ -1779,7 +1622,6 @@
             // Remove logo
             stcElements.logoRemoveBtn.addEventListener('click', function() {
                 stcState.logoUrl = stcDefaultLogo;
-                stcState.hasLogo = false;
                 stcState.backgroundRemoved = false;
                 stcState.isProcessingBgRemoval = false;
                 
@@ -1787,8 +1629,7 @@
                 stcElements.logoPreviewName.textContent = 'Default Logo';
                 
                 stcLoadDefaultLogo();
-                stcUpdateProgress();
-                
+
                 stcElements.logoRemoveBgBtn.disabled = false;
                 stcElements.logoRemoveBgBtn.innerHTML = '<i class="fas fa-cut"></i><span>Remove BG</span>';
                 
@@ -1892,10 +1733,8 @@
             // Outline Toggle
             stcElements.outlineToggle.addEventListener('change', function() {
                 stcState.outlineEnabled = this.checked;
-                stcState.hasOutline = this.checked;
                 stcElements.outlineControls.classList.toggle('stc-hidden', !this.checked);
                 stcDraw();
-                stcUpdateProgress();
                 stcShowNotification('Outline Updated', 'Outline has been ' + (this.checked ? 'enabled' : 'disabled'), 'info');
             });
             
@@ -1945,13 +1784,11 @@
                 
                 stcState.grid.horizontal = finalHorizontal;
                 stcState.grid.vertical = finalVertical;
-                stcState.hasLayout = true;
-                
+
                 stcUpdateCanvasSize();
                 stcUpdateSpaceUsed();
                 stcDraw();
-                stcUpdateProgress();
-                
+
                 stcShowNotification('Layout Updated', 'Grid: ' + finalHorizontal + '×' + finalVertical + ' (' + (finalHorizontal * finalVertical) + ' stickers)', 'success');
             }
             
@@ -2234,9 +2071,6 @@
                 stcState.outline.smoothing = true;
                 stcState.grid.horizontal = 2;
                 stcState.grid.vertical = 2;
-                stcState.hasLogo = false;
-                stcState.hasOutline = true;
-                stcState.hasLayout = false;
                 stcState.backgroundRemoved = false;
                 stcState.isProcessingBgRemoval = false;
                 
@@ -2259,9 +2093,8 @@
                 stcLoadDefaultLogo();
                 stcUpdateSizeDisplay();
                 stcUpdateSpaceUsed();
-                stcUpdateProgress();
                 stcDraw();
-                
+
                 stcShowNotification('Settings Reset', 'All settings have been reset to default', 'info');
             });
             
