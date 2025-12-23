@@ -3210,12 +3210,7 @@
                                     // Restore context state (removes clipping)
                                     sheetCtx.restore();
                                     
-                                    // Draw outer circle border for clean edges
-                                    sheetCtx.beginPath();
-                                    sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
-                                    sheetCtx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
-                                    sheetCtx.lineWidth = 1;
-                                    sheetCtx.stroke();
+
                                 }
                             }
                             
