@@ -1732,24 +1732,42 @@
                         stcState.hasLogo = true;
                         stcState.backgroundRemoved = false;
                         stcState.isProcessingBgRemoval = false;
-                        
+
                         stcElements.logoRemoveBgBtn.disabled = false;
                         stcElements.logoRemoveBgBtn.classList.remove('stc-processing');
                         stcElements.logoRemoveBgBtn.innerHTML = '<i class="fas fa-cut"></i><span>Remove BG</span>';
                         stcElements.logoRemoveBgBtn.title = 'Remove Background';
-                        
+
                         stcElements.logoPreviewImg.src = e.target.result;
                         stcElements.logoPreviewName.textContent = file.name;
                         stcElements.logoPreview.style.display = 'block';
-                        
+
                         const img = new Image();
                         img.onload = function() {
-                            stcState.originalImage = img;
-                            stcDraw();
-                            stcUpdateProgress();
+                            // Upscale low-resolution images for better quality
+                            if (img.naturalWidth < 500 || img.naturalHeight < 500) {
+                                const scale = Math.max(4, Math.max(500 / img.naturalWidth, 500 / img.naturalHeight));
+                                const upscaleCanvas = document.createElement('canvas');
+                                const upscaleCtx = upscaleCanvas.getContext('2d');
+                                upscaleCanvas.width = Math.floor(img.naturalWidth * scale);
+                                upscaleCanvas.height = Math.floor(img.naturalHeight * scale);
+                                upscaleCtx.imageSmoothingEnabled = false; // Sharp upscaling
+                                upscaleCtx.drawImage(img, 0, 0, upscaleCanvas.width, upscaleCanvas.height);
+                                const upscaledImg = new Image();
+                                upscaledImg.onload = function() {
+                                    stcState.originalImage = upscaledImg;
+                                    stcDraw();
+                                    stcUpdateProgress();
+                                };
+                                upscaledImg.src = upscaleCanvas.toDataURL('image/png');
+                            } else {
+                                stcState.originalImage = img;
+                                stcDraw();
+                                stcUpdateProgress();
+                            }
                         };
                         img.src = e.target.result;
-                        
+
                         stcShowNotification('Logo Uploaded', 'Your logo has been successfully uploaded', 'success');
                     };
                     reader.readAsDataURL(file);
@@ -1819,16 +1837,35 @@
                     if (response.ok) {
                         const resultBlob = await response.blob();
                         const imageUrl = URL.createObjectURL(resultBlob);
-                        
+
                         stcState.logoUrl = imageUrl;
                         stcState.backgroundRemoved = true;
-                        
+
                         const processedImg = new Image();
                         processedImg.onload = function() {
-                            stcState.originalImage = processedImg;
-                            stcElements.logoPreviewImg.src = imageUrl;
-                            stcDraw();
-                            stcShowNotification('Success', 'Background removed successfully!', 'success');
+                            // Upscale low-resolution processed images for better quality
+                            if (processedImg.naturalWidth < 500 || processedImg.naturalHeight < 500) {
+                                const scale = Math.max(4, Math.max(500 / processedImg.naturalWidth, 500 / processedImg.naturalHeight));
+                                const upscaleCanvas = document.createElement('canvas');
+                                const upscaleCtx = upscaleCanvas.getContext('2d');
+                                upscaleCanvas.width = Math.floor(processedImg.naturalWidth * scale);
+                                upscaleCanvas.height = Math.floor(processedImg.naturalHeight * scale);
+                                upscaleCtx.imageSmoothingEnabled = false; // Sharp upscaling
+                                upscaleCtx.drawImage(processedImg, 0, 0, upscaleCanvas.width, upscaleCanvas.height);
+                                const upscaledImg = new Image();
+                                upscaledImg.onload = function() {
+                                    stcState.originalImage = upscaledImg;
+                                    stcElements.logoPreviewImg.src = imageUrl;
+                                    stcDraw();
+                                    stcShowNotification('Success', 'Background removed successfully!', 'success');
+                                };
+                                upscaledImg.src = upscaleCanvas.toDataURL('image/png');
+                            } else {
+                                stcState.originalImage = processedImg;
+                                stcElements.logoPreviewImg.src = imageUrl;
+                                stcDraw();
+                                stcShowNotification('Success', 'Background removed successfully!', 'success');
+                            }
                         };
                         processedImg.src = imageUrl;
                     } else {
@@ -1994,6 +2031,7 @@
                         tempCanvas.width = stickerSize;
                         tempCanvas.height = stickerSize;
                         const tempCtx = tempCanvas.getContext('2d');
+                        tempCtx.imageSmoothingEnabled = false; // Sharp for outline calculation
                         
                         stcCtx.save();
                         stcCtx.beginPath();
@@ -2253,156 +2291,71 @@
                 stcElements.notificationToast.classList.remove('stc-show');
             });
             
-            // Generate sticker sheet
+            // Generate sticker sheet asynchronously to prevent hanging
             function stcGenerateStickerSheet() {
                 stcElements.downloadBtn.disabled = true;
                 stcElements.downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Generating...</span>';
-                
+
                 stcShowNotification('Generating Sticker Sheet', 'Creating high-quality sticker sheet...', 'info');
-                
-                setTimeout(function() {
-                    try {
-                        const sheetCanvas = document.createElement('canvas');
-                        const sheetCtx = sheetCanvas.getContext('2d');
-                        
-                        const cols = stcState.grid.horizontal;
-                        const rows = stcState.grid.vertical;
-                        const outlineWidth = stcState.outlineEnabled ? stcState.outline.width : 0;
-                        const outlineColor = stcState.outline.color;
-                        const smooth = stcState.outline.smoothing;
-                        
-                        const baseStickerSize = Math.min(300, (stcState.calculatedStickerSize || 120) * 2);
-                        const gap = (stcState.calculatedGap || 15) * 2;
-                        const padding = (stcState.calculatedPadding || 30) * 2;
-                        
-                        let totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
-                        let totalHeight = rows * baseStickerSize + (rows - 1) * gap + padding * 2;
-                        
-                        const maxTotalSize = 4000;
-                        const scaleFactor = Math.min(1, maxTotalSize / Math.max(totalWidth, totalHeight));
-                        if (scaleFactor < 1) {
-                            totalWidth = Math.floor(totalWidth * scaleFactor);
-                            totalHeight = Math.floor(totalHeight * scaleFactor);
-                        }
-                        
-                        sheetCanvas.width = totalWidth;
-                        sheetCanvas.height = totalHeight;
-                        
-                        sheetCtx.imageSmoothingEnabled = true;
-                        sheetCtx.imageSmoothingQuality = 'high';
-                        
-                        const stickerSize = Math.min(
-                            (totalWidth - (cols - 1) * gap - padding * 2) / cols,
-                            (totalHeight - (rows - 1) * gap - padding * 2) / rows
-                        );
-                        
-                        const startX = (totalWidth - (cols * stickerSize + (cols - 1) * gap)) / 2;
-                        const startY = (totalHeight - (rows * stickerSize + (rows - 1) * gap)) / 2;
-                        
-                        for (let row = 0; row < rows; row++) {
-                            for (let col = 0; col < cols; col++) {
-                                const stickerX = startX + col * (stickerSize + gap);
-                                const stickerY = startY + row * (stickerSize + gap);
-                                const centerX = stickerX + stickerSize / 2;
-                                const centerY = stickerY + stickerSize / 2;
-                                
-                                const tempCanvas = document.createElement('canvas');
-                                tempCanvas.width = stickerSize;
-                                tempCanvas.height = stickerSize;
-                                const tempCtx = tempCanvas.getContext('2d');
-                                
-                                const imgW = stcState.originalImage.width;
-                                const imgH = stcState.originalImage.height;
-                                const maxImgSize = stickerSize * 0.8;
-                                const imgScale = Math.min(maxImgSize / imgW, maxImgSize / imgH);
-                                const drawW = imgW * imgScale;
-                                const drawH = imgH * imgScale;
-                                const imgX = centerX - drawW / 2;
-                                const imgY = centerY - drawH / 2;
-                                tempCtx.drawImage(stcState.originalImage, imgX - stickerX, imgY - stickerY, drawW, drawH);
-                                
-                                const imageData = tempCtx.getImageData(0, 0, stickerSize, stickerSize);
-                                const data = imageData.data;
-                                const distMap = new Float32Array(stickerSize * stickerSize);
-                                const INF = 1e9;
-                                
-                                for (let i = 0; i < stickerSize * stickerSize; i++) {
-                                    distMap[i] = data[i * 4 + 3] > 10 ? 0 : INF;
-                                }
-                                
-                                for (let y = 0; y < stickerSize; y++) {
-                                    for (let x = 0; x < stickerSize; x++) {
-                                        const idx = y * stickerSize + x;
-                                        if (distMap[idx] === 0) continue;
-                                        let min = distMap[idx];
-                                        if (x > 0) min = Math.min(min, distMap[idx - 1] + 1);
-                                        if (y > 0) {
-                                            min = Math.min(min, distMap[idx - stickerSize] + 1);
-                                            if (x > 0) min = Math.min(min, distMap[idx - stickerSize - 1] + 1.414);
-                                            if (x < stickerSize - 1) min = Math.min(min, distMap[idx - stickerSize + 1] + 1.414);
-                                        }
-                                        distMap[idx] = min;
-                                    }
-                                }
-                                
-                                for (let y = stickerSize - 1; y >= 0; y--) {
-                                    for (let x = stickerSize - 1; x >= 0; x--) {
-                                        const idx = y * stickerSize + x;
-                                        if (distMap[idx] === 0) continue;
-                                        let min = distMap[idx];
-                                        if (x < stickerSize - 1) min = Math.min(min, distMap[idx + 1] + 1);
-                                        if (y < stickerSize - 1) {
-                                            min = Math.min(min, distMap[idx + stickerSize] + 1);
-                                            if (x < stickerSize - 1) min = Math.min(min, distMap[idx + stickerSize + 1] + 1.414);
-                                            if (x > 0) min = Math.min(min, distMap[idx + stickerSize - 1] + 1.414);
-                                        }
-                                        distMap[idx] = min;
-                                    }
-                                }
-                                
-                                sheetCtx.save();
-                                sheetCtx.beginPath();
-                                sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
-                                sheetCtx.clip();
-                                
-                                sheetCtx.beginPath();
-                                sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
-                                sheetCtx.fillStyle = '#ffffff';
-                                sheetCtx.fill();
-                                
-                                const outlineScale = stickerSize / (stcState.calculatedStickerSize || 120);
-                                const scaledOutlineWidth = outlineWidth * outlineScale;
-                                
-                                if (outlineWidth > 0) {
-                                    const rgb = stcHexToRgb(outlineColor);
-                                    const resultData = sheetCtx.createImageData(stickerSize, stickerSize);
-                                    const res = resultData.data;
-                                    
-                                    for (let i = 0; i < stickerSize * stickerSize; i++) {
-                                        const dist = distMap[i];
-                                        if (dist <= scaledOutlineWidth) {
-                                            let alpha = 255;
-                                            if (smooth && dist > scaledOutlineWidth - 1) {
-                                                alpha = 255 * (1 - (dist - (scaledOutlineWidth - 1)));
-                                            }
-                                            res[i * 4] = rgb[0];
-                                            res[i * 4 + 1] = rgb[1];
-                                            res[i * 4 + 2] = rgb[2];
-                                            res[i * 4 + 3] = alpha;
-                                        }
-                                    }
-                                    sheetCtx.putImageData(resultData, stickerX, stickerY);
-                                }
-                                
-                                sheetCtx.shadowColor = 'transparent';
-                                sheetCtx.drawImage(stcState.originalImage, imgX, imgY, drawW, drawH);
-                                sheetCtx.restore();
-                            }
-                        }
-                        
+
+                const cols = stcState.grid.horizontal;
+                const rows = stcState.grid.vertical;
+                const totalStickers = cols * rows;
+                let processedStickers = 0;
+
+                const sheetCanvas = document.createElement('canvas');
+                const sheetCtx = sheetCanvas.getContext('2d');
+
+                const outlineWidth = stcState.outlineEnabled ? stcState.outline.width : 0;
+                const outlineColor = stcState.outline.color;
+                const smooth = stcState.outline.smoothing;
+
+                const baseStickerSize = (stcState.calculatedStickerSize || 120) * 8;
+                const gap = (stcState.calculatedGap || 15) * 2;
+                const padding = (stcState.calculatedPadding || 30) * 2;
+
+                let totalWidth = cols * baseStickerSize + (cols - 1) * gap + padding * 2;
+                let totalHeight = rows * baseStickerSize + (rows - 1) * gap + padding * 2;
+
+                const maxTotalSize = 6000;
+                const maxPixels = 64 * 1024 * 1024; // 64MP for high resolution without corruption
+                const currentPixels = totalWidth * totalHeight;
+                const pixelScale = Math.min(1, maxPixels / currentPixels);
+                const sizeScale = Math.min(1, maxTotalSize / Math.max(totalWidth, totalHeight));
+                const scaleFactor = Math.min(pixelScale, sizeScale);
+                if (scaleFactor < 1) {
+                    totalWidth = Math.floor(totalWidth * scaleFactor);
+                    totalHeight = Math.floor(totalHeight * scaleFactor);
+                }
+
+                sheetCanvas.width = totalWidth;
+                sheetCanvas.height = totalHeight;
+
+                // Fill background white to avoid transparency
+                sheetCtx.fillStyle = '#ffffff';
+                sheetCtx.fillRect(0, 0, totalWidth, totalHeight);
+
+                sheetCtx.imageSmoothingEnabled = true;
+                sheetCtx.imageSmoothingQuality = 'high';
+
+                const stickerSize = Math.min(
+                    (totalWidth - (cols - 1) * gap - padding * 2) / cols,
+                    (totalHeight - (rows - 1) * gap - padding * 2) / rows,
+                    1000 // Max sticker size to prevent slow processing
+                );
+
+                const startX = (totalWidth - (cols * stickerSize + (cols - 1) * gap)) / 2;
+                const startY = (totalHeight - (rows * stickerSize + (rows - 1) * gap)) / 2;
+
+                let row = 0;
+                let col = 0;
+
+                function processNextSticker() {
+                    if (row >= rows) {
+                        // All done, generate blob
                         sheetCanvas.toBlob(function(blob) {
                             if (!blob) throw new Error('Failed to generate image');
-                            
+
                             const url = URL.createObjectURL(blob);
                             const a = document.createElement('a');
                             a.href = url;
@@ -2411,18 +2364,131 @@
                             a.click();
                             document.body.removeChild(a);
                             URL.revokeObjectURL(url);
-                            
+
                             stcShowNotification('Download Complete', 'Your sticker sheet has been downloaded', 'success');
                         }, 'image/png', 1.0);
-                        
-                    } catch (error) {
-                        console.error('Sticker generation error:', error);
-                        stcShowNotification('Download Failed', 'There was an error generating your sticker sheet', 'error');
-                    } finally {
+
                         stcElements.downloadBtn.disabled = false;
                         stcElements.downloadBtn.innerHTML = '<i class="fas fa-download"></i><span>Download</span>';
+                        return;
                     }
-                }, 100);
+
+                    const stickerX = startX + col * (stickerSize + gap);
+                    const stickerY = startY + row * (stickerSize + gap);
+                    const centerX = stickerX + stickerSize / 2;
+                    const centerY = stickerY + stickerSize / 2;
+
+                    const tempCanvas = document.createElement('canvas');
+                    tempCanvas.width = stickerSize;
+                    tempCanvas.height = stickerSize;
+                    const tempCtx = tempCanvas.getContext('2d');
+
+                    const imgW = stcState.originalImage.width;
+                    const imgH = stcState.originalImage.height;
+                    const maxImgSize = stickerSize * 0.8;
+                    const imgScale = Math.min(maxImgSize / imgW, maxImgSize / imgH);
+                    const drawW = imgW * imgScale;
+                    const drawH = imgH * imgScale;
+                    const imgX = centerX - drawW / 2;
+                    const imgY = centerY - drawH / 2;
+                    tempCtx.drawImage(stcState.originalImage, imgX - stickerX, imgY - stickerY, drawW, drawH);
+
+                    const imageData = tempCtx.getImageData(0, 0, stickerSize, stickerSize);
+                    const data = imageData.data;
+                    const distMap = new Float32Array(stickerSize * stickerSize);
+                    const INF = 1e9;
+
+                    for (let i = 0; i < stickerSize * stickerSize; i++) {
+                        distMap[i] = data[i * 4 + 3] > 10 ? 0 : INF;
+                    }
+
+                    for (let y = 0; y < stickerSize; y++) {
+                        for (let x = 0; x < stickerSize; x++) {
+                            const idx = y * stickerSize + x;
+                            if (distMap[idx] === 0) continue;
+                            let min = distMap[idx];
+                            if (x > 0) min = Math.min(min, distMap[idx - 1] + 1);
+                            if (y > 0) {
+                                min = Math.min(min, distMap[idx - stickerSize] + 1);
+                                if (x > 0) min = Math.min(min, distMap[idx - stickerSize - 1] + 1.414);
+                                if (x < stickerSize - 1) min = Math.min(min, distMap[idx - stickerSize + 1] + 1.414);
+                            }
+                            distMap[idx] = min;
+                        }
+                    }
+
+                    for (let y = stickerSize - 1; y >= 0; y--) {
+                        for (let x = stickerSize - 1; x >= 0; x--) {
+                            const idx = y * stickerSize + x;
+                            if (distMap[idx] === 0) continue;
+                            let min = distMap[idx];
+                            if (x < stickerSize - 1) min = Math.min(min, distMap[idx + 1] + 1);
+                            if (y < stickerSize - 1) {
+                                min = Math.min(min, distMap[idx + stickerSize] + 1);
+                                if (x < stickerSize - 1) min = Math.min(min, distMap[idx + stickerSize + 1] + 1.414);
+                                if (x > 0) min = Math.min(min, distMap[idx + stickerSize - 1] + 1.414);
+                            }
+                            distMap[idx] = min;
+                        }
+                    }
+
+                    sheetCtx.save();
+                    sheetCtx.beginPath();
+                    sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
+                    sheetCtx.clip();
+
+                    sheetCtx.beginPath();
+                    sheetCtx.arc(centerX, centerY, stickerSize / 2, 0, 2 * Math.PI);
+                    sheetCtx.fillStyle = '#ffffff';
+                    sheetCtx.fill();
+
+                    const outlineScale = stickerSize / (stcState.calculatedStickerSize || 120);
+                    const scaledOutlineWidth = outlineWidth * outlineScale;
+
+                    if (outlineWidth > 0) {
+                        const rgb = stcHexToRgb(outlineColor);
+                        const resultData = sheetCtx.createImageData(stickerSize, stickerSize);
+                        const res = resultData.data;
+
+                        for (let i = 0; i < stickerSize * stickerSize; i++) {
+                            const dist = distMap[i];
+                            if (dist <= scaledOutlineWidth) {
+                                let alpha = 255;
+                                if (smooth && dist > scaledOutlineWidth - 1) {
+                                    alpha = 255 * (1 - (dist - (scaledOutlineWidth - 1)));
+                                }
+                                res[i * 4] = rgb[0];
+                                res[i * 4 + 1] = rgb[1];
+                                res[i * 4 + 2] = rgb[2];
+                                res[i * 4 + 3] = alpha;
+                            }
+                        }
+                        sheetCtx.putImageData(resultData, stickerX, stickerY);
+                    }
+
+                    sheetCtx.shadowColor = 'transparent';
+                    sheetCtx.drawImage(stcState.originalImage, imgX, imgY, drawW, drawH);
+                    sheetCtx.restore();
+
+                    processedStickers++;
+                    col++;
+                    if (col >= cols) {
+                        col = 0;
+                        row++;
+                    }
+
+                    // Update progress every 10 stickers
+                    if (processedStickers % 10 === 0) {
+                        const progress = Math.round((processedStickers / totalStickers) * 100);
+                        stcShowNotification('Generating Sticker Sheet', 'Processing... ' + progress + '% complete', 'info');
+                    }
+
+                    // Yield control every sticker to keep UI responsive
+                    setTimeout(processNextSticker, 0);
+                }
+
+                // Start processing
+                processNextSticker();
             }
             
             // Handle window resize
