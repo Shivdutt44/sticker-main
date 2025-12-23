@@ -1011,6 +1011,12 @@
             transition: var(--transition);
         }
         
+        @media (max-width: 767px) {
+            .preview-board {
+                overflow: visible;
+            }
+        }
+        
         .preview-board-label {
             position: absolute;
             top: 0.5rem;
@@ -1039,6 +1045,12 @@
             align-items: center;
             justify-content: center;
             transition: var(--transition);
+        }
+        
+        @media (max-width: 767px) {
+            .canvas-container {
+                overflow: visible;
+            }
         }
         
         #stickerCanvas {
@@ -1288,9 +1300,18 @@
             }
             
             .preview-board-container {
-                min-height: 300px;
+                min-height: 320px;
+                padding: 0.75rem;
+                overflow: visible;
             }
             
+            .preview-board {
+                overflow: visible;
+            }
+            
+            .canvas-container {
+                overflow: visible;
+            }
             /* Progress indicator adjustments */
             .progress-indicator {
                 margin-bottom: 0.75rem;
@@ -1355,6 +1376,8 @@
             
             .preview-board-container {
                 min-height: 280px;
+                padding: 0.5rem;
+                overflow: visible;
             }
             
             .preview-specs {
@@ -1395,6 +1418,8 @@
             
             .preview-board-container {
                 min-height: 250px;
+                padding: 0.5rem;
+                overflow: visible;
             }
             
             .preview-specs {
@@ -2975,9 +3000,11 @@
                 const areaRatio = totalStickerArea / boardArea;
                 
                 // Mobile constraints
-                const maxMobileCanvasSize = isMobile ? 320 : 400;
+                const maxMobileCanvasSize = isMobile ? 360 : 400;
+                const maxMobileCanvasHeight = isMobile ? 320 : 500;
                 const maxDesktopCanvasSize = 600;
                 const maxCanvasSize = isMobile ? maxMobileCanvasSize : maxDesktopCanvasSize;
+                const maxCanvasHeight = isMobile ? maxMobileCanvasHeight : 500;
                 
                 // Calculate optimal sticker size based on grid density
                 const gap = isMobile ? 8 : 10;
@@ -2985,7 +3012,7 @@
                 
                 // Calculate sticker size to fit grid while maintaining proportions
                 const availableWidth = maxCanvasSize - (cols - 1) * gap - padding * 2;
-                const availableHeight = (isMobile ? 280 : 500) - (rows - 1) * gap - padding * 2;
+                const availableHeight = (maxCanvasHeight) - (rows - 1) * gap - padding * 2;
                 
                 const maxStickerWidth = availableWidth / cols;
                 const maxStickerHeight = availableHeight / rows;
@@ -3001,7 +3028,7 @@
                 
                 // Ensure canvas doesn't exceed maximum limits
                 const safeWidth = Math.min(totalWidth, maxCanvasSize);
-                const safeHeight = Math.min(totalHeight, isMobile ? 280 : 500);
+                const safeHeight = Math.min(totalHeight, maxCanvasHeight);
                 
                 console.log(`Final canvas size: ${safeWidth}×${safeHeight}px`);
                 
