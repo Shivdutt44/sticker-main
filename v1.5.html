@@ -1554,9 +1554,9 @@
                             <div class="slider-control">
                                 <div class="slider-label">
                                     <span>Outline Width</span>
-                                    <span class="slider-value" id="outlineWidthValue">10px</span>
+                                    <span class="slider-value" id="outlineWidthValue">6px</span>
                                 </div>
-                                <input type="range" min="0" max="30" value="10" class="slider" id="outlineWidth">
+                                <input type="range" min="0" max="30" value="6" class="slider" id="outlineWidth">
                             </div>
                             
                             <div class="checkbox-control">
@@ -1753,7 +1753,7 @@
                 stickerDiameter: 5, // in cm
                 outlineEnabled: true,
                 outline: {
-                    width: 10,
+                    width: 6,
                     color: '#000000',
                     smoothing: true
                 },
@@ -1814,8 +1814,8 @@
                 testRemoveBgApi();
                 
                 // Set initial values
-                outlineWidth.value = appState.outline.width;
-                outlineWidthValue.textContent = `${appState.outline.width}px`;
+                outlineWidth.value = 6;
+                outlineWidthValue.textContent = `6px`;
                 outlineToggle.checked = appState.outlineEnabled;
                 smoothingToggle.checked = appState.outline.smoothing;
                 boardSizeSelect.value = '15x20';
@@ -2438,7 +2438,7 @@
                 appState.boardSize = { width: 15, height: 20 };
                 appState.stickerDiameter = 5;
                 appState.outlineEnabled = true;
-                appState.outline.width = 10;
+                appState.outline.width = 6;
                 appState.outline.color = '#000000';
                 appState.outline.smoothing = true;
                 appState.grid.horizontal = 2;
