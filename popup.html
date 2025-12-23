@@ -175,37 +175,6 @@
             height: calc(100vh - 80px);
         }
         
-        #stc-wrapper .stc-controls-tabs {
-            display: flex;
-            background: var(--stc-secondary-color);
-            border-bottom: 1px solid var(--stc-border-color);
-            flex-shrink: 0;
-        }
-        
-        #stc-wrapper .stc-controls-tab {
-            flex: 1;
-            padding: 1rem 0.5rem;
-            text-align: center;
-            font-weight: 500;
-            color: var(--stc-light-text);
-            cursor: pointer;
-            transition: var(--stc-transition);
-            border-bottom: 3px solid transparent;
-            font-size: 0.875rem;
-        }
-        
-        #stc-wrapper .stc-controls-tab.stc-active {
-            color: var(--stc-primary-color);
-            border-bottom-color: var(--stc-primary-color);
-            background: white;
-        }
-        
-        #stc-wrapper .stc-controls-tab i {
-            display: block;
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
-        }
-        
         #stc-wrapper .stc-controls-content {
             padding: 1rem;
             overflow-y: auto;
@@ -1123,10 +1092,6 @@
         
         /* Touch device optimizations */
         @media (hover: none) and (pointer: coarse) {
-            #stc-wrapper .stc-controls-tab {
-                padding: 1rem 0.5rem;
-            }
-            
             #stc-wrapper .stc-preview-action-btn,
             #stc-wrapper .stc-confirmation-btn {
                 min-height: 44px;
@@ -1181,13 +1146,6 @@
                     <div class="stc-app-container">
                         <!-- Controls Panel -->
                         <aside class="stc-controls-panel" id="stc-controls-panel">
-                            <div class="stc-controls-tabs">
-                                <div class="stc-controls-tab stc-active" data-tab="design">
-                                    <i class="fas fa-palette"></i>
-                                    <span>Design</span>
-                                </div>
-                            </div>
-                            
                             <div class="stc-controls-content">
                                 <!-- Design Tab -->
                                 <div class="stc-tab-content" id="stc-design-tab">
