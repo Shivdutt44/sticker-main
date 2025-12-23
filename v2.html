@@ -42,6 +42,72 @@
             min-height: 100vh;
         }
         
+        /* Header */
+        .app-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1rem;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .app-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .app-logo i {
+            font-size: 1.5rem;
+        }
+        
+        .app-logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .app-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .app-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .app-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
         
         /* Progress Indicator */
         .progress-indicator {
@@ -130,7 +196,7 @@
             display: grid;
             grid-template-columns: 350px 1fr;
             gap: 1rem;
-            min-height: calc(100vh - 80px);
+            min-height: calc(100vh - 180px);
         }
         
         /* Controls Panel */
@@ -142,8 +208,8 @@
             display: flex;
             flex-direction: column;
             position: sticky;
-            top: 1rem;
-            height: calc(100vh - 80px);
+            top: calc(100px + 4rem);
+            height: calc(100vh - 180px);
         }
         
         .controls-tabs {
@@ -1125,8 +1191,20 @@
             
             .controls-panel {
                 width: 280px;
-                height: calc(100vh - 60px);
-                top: 0.5rem;
+                height: calc(100vh - 140px);
+                top: calc(100px + 2.5rem);
+            }
+            
+            .app-header-content {
+                padding: 0 0.75rem;
+            }
+            
+            .app-logo h1 {
+                font-size: 1.25rem;
+            }
+            
+            .app-actions {
+                gap: 0.75rem;
             }
             
             .preview-specs {
@@ -1307,12 +1385,16 @@
         /* Height-based adjustments for desktop */
         @media (min-width: 1024px) and (max-height: 800px) {
             .controls-panel {
-                height: calc(100vh - 60px);
-                top: 0.5rem;
+                height: calc(100vh - 140px);
+                top: calc(100px + 2rem);
             }
             
             .controls-content {
-                max-height: calc(100vh - 100px);
+                max-height: calc(100vh - 220px);
+            }
+            
+            .app-header {
+                padding: 0.75rem 1rem;
             }
             
             .progress-indicator {
@@ -1322,23 +1404,23 @@
         
         @media (min-width: 1024px) and (min-height: 801px) and (max-height: 1000px) {
             .controls-panel {
-                height: calc(100vh - 80px);
-                top: 1rem;
+                height: calc(100vh - 160px);
+                top: calc(100px + 3rem);
             }
             
             .controls-content {
-                max-height: calc(100vh - 120px);
+                max-height: calc(100vh - 240px);
             }
         }
         
         @media (min-width: 1024px) and (min-height: 1001px) {
             .controls-panel {
-                height: calc(100vh - 80px);
-                top: 1rem;
+                height: calc(100vh - 180px);
+                top: calc(100px + 4rem);
             }
             
             .controls-content {
-                max-height: calc(100vh - 120px);
+                max-height: calc(100vh - 280px);
             }
         }
         
@@ -1348,6 +1430,7 @@
                 padding: 1rem 0.5rem;
             }
             
+            .app-action-btn,
             .preview-action-btn,
             .confirmation-btn {
                 min-height: 44px;
@@ -1392,6 +1475,26 @@
     </style>
 </head>
 <body>
+    <!-- App Header -->
+    <header class="app-header">
+        <div class="app-header-content">
+            <div class="app-logo">
+                <i class="fas fa-tags"></i>
+                <h1>Sticker Customizer</h1>
+            </div>
+            <div class="app-actions">
+                <button class="app-action-btn" id="saveDesignBtn">
+                    <i class="fas fa-save"></i>
+                    <span>Save Design</span>
+                </button>
+                <button class="app-action-btn" id="shareDesignBtn">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Share</span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
     <!-- Progress Indicator -->
     <div class="progress-indicator">
         <div class="progress-step active" id="step1">
@@ -1720,6 +1823,8 @@
             // Action Buttons
             const resetBtn = document.getElementById('resetBtn');
             const downloadBtn = document.getElementById('downloadBtn');
+            const saveDesignBtn = document.getElementById('saveDesignBtn');
+            const shareDesignBtn = document.getElementById('shareDesignBtn');
             const confirmYesBtn = document.getElementById('confirmYesBtn');
             const confirmHelpBtn = document.getElementById('confirmHelpBtn');
             const successMessage = document.getElementById('successMessage');
@@ -2485,6 +2590,18 @@
             // Download button - generate sticker sheet
             downloadBtn.addEventListener('click', function() {
                 generateStickerSheet();
+            });
+            
+            // Save Design Button
+            saveDesignBtn.addEventListener('click', function() {
+                // In a real implementation, this would save the design to user account
+                showNotification('Design Saved', 'Your design has been saved to your account', 'success');
+            });
+            
+            // Share Design Button
+            shareDesignBtn.addEventListener('click', function() {
+                // In a real implementation, this would open share dialog
+                showNotification('Share Ready', 'Share options are now available', 'info');
             });
             
             confirmYesBtn.addEventListener('click', function() {
